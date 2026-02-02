@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="520" viewBox="0 0 520 520" role="img" aria-label="Hero placeholder">
+  <rect width="520" height="520" fill="#f4efe8"/>
+  <rect x="40" y="40" width="440" height="440" rx="32" fill="#efe0d4"/>
+  <g fill="#c5b6a8" font-family="Arial, sans-serif" font-size="20" text-anchor="middle">
+    <text x="260" y="250">TODO: Hero image</text>
+    <text x="260" y="280">Replace with final asset</text>
+  </g>
+</svg>

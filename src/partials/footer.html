@@ -1,15 +1,75 @@
 <footer class="footer">
-  <div class="container">
-    <p class="footer-desc">
-      Made with ✨ by
-      <a
-        class="footer-link"
-        href="https://goit.global/ua/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        GoIT team
+  <div class="container footer__container">
+    <div class="footer__brand">
+      <a class="logo logo--footer" href="#/home" aria-label="Your Energy home">
+        <span class="logo__accent">Your</span>
+        Energy
       </a>
-    </p>
+      <p class="footer__tagline">
+        Your daily movement hub. Save favorites and keep energy high.
+      </p>
+      <ul class="social-list" aria-label="Social links">
+        <li class="social-list__item">
+          <a
+            class="social-list__link"
+            href="https://www.facebook.com/goITclub/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GoIT Facebook"
+          >
+          <svg class="social-list__icon" width="20" height="20" aria-hidden="true">
+            <use href="./img/sprite.svg#icon-facebook"></use>
+          </svg>
+        </a>
+      </li>
+        <li class="social-list__item">
+          <a
+            class="social-list__link"
+            href="https://www.instagram.com/goitclub/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GoIT Instagram"
+          >
+          <svg class="social-list__icon" width="20" height="20" aria-hidden="true">
+            <use href="./img/sprite.svg#icon-instagram"></use>
+          </svg>
+        </a>
+      </li>
+        <li class="social-list__item">
+          <a
+            class="social-list__link"
+            href="https://www.youtube.com/c/GoIT"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GoIT YouTube"
+          >
+          <svg class="social-list__icon" width="20" height="20" aria-hidden="true">
+            <use href="./img/sprite.svg#icon-youtube"></use>
+          </svg>
+        </a>
+      </li>
+      </ul>
+    </div>
+
+    <form class="footer__form" data-subscription-form>
+      <h2 class="footer__form-title">Subscribe</h2>
+      <p class="footer__form-text">Get weekly tips and curated workouts.</p>
+      <label class="footer__label" for="subscribe-email">Email</label>
+      <div class="footer__field">
+        <input
+          class="footer__input"
+          id="subscribe-email"
+          type="email"
+          name="email"
+          placeholder="you@email.com"
+          required
+        />
+        <button class="btn btn--primary" type="submit">Join</button>
+      </div>
+      <p class="footer__note">By subscribing you agree to receive updates.</p>
+    </form>
+  </div>
+  <div class="footer__bottom">
+    <p class="footer__copy">(c) 2026 Your Energy. All rights reserved.</p>
   </div>
 </footer>

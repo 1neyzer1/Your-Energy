@@ -1,0 +1,25 @@
+.favorites {
+  padding: 40px 0 80px;
+}
+
+.favorites__header {
+  margin-bottom: 24px;
+}
+
+.favorites__title {
+  font-family: var(--font-accent);
+  font-size: clamp(28px, 5vw, 44px);
+  margin-bottom: 8px;
+}
+
+.favorites__subtitle {
+  color: var(--color-muted);
+  max-width: 520px;
+}
+
+.favorites__empty {
+  padding: 24px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-border);
+  color: var(--color-muted);
+}

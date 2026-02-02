@@ -1,0 +1,174 @@
+<section class="home" data-route="home">
+  <section class="hero">
+    <div class="container hero__container">
+      <div class="hero__content">
+        <p class="hero__eyebrow">Your Energy</p>
+        <h1 class="hero__title">Build strength, fuel your day.</h1>
+        <p class="hero__text">
+          Discover exercises tailored to your goals and keep daily activity on your
+          radar with quick, focused workouts.
+        </p>
+        <a class="hero__cta" href="#/home" data-scroll-target="exercises">
+          Start training
+        </a>
+      </div>
+      <div class="hero__aside">
+        <div class="hero__visual">
+          <!-- TODO: replace hero image with final asset -->
+          <img
+            class="hero__image"
+            src="./images/hero-placeholder.svg"
+            alt="Workout motivation visual"
+            width="520"
+            height="520"
+          />
+        </div>
+        <div class="quote-card" data-quote>
+          <div class="quote-card__header">
+            <h2 class="quote-card__title">
+              <svg class="quote-card__icon" width="20" height="20" aria-hidden="true">
+                <use href="./img/sprite.svg#icon-quote"></use>
+              </svg>
+              Quote of the day
+            </h2>
+            <span class="quote-card__date" data-quote-date>Today</span>
+          </div>
+          <p class="quote-card__text" data-quote-text>
+            Loading daily inspiration...
+          </p>
+          <p class="quote-card__author" data-quote-author>--</p>
+        </div>
+        <div class="daily-card">
+          <div class="daily-card__value">
+            <svg class="daily-card__icon" width="24" height="24" aria-hidden="true">
+              <use href="./img/sprite.svg#icon-run"></use>
+            </svg>
+            <span class="daily-card__minutes">110</span>
+            <span class="daily-card__unit">min</span>
+          </div>
+          <p class="daily-card__text">
+            Daily movement boosts energy levels, supports heart health, and keeps
+            focus sharp.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="catalog" id="exercises">
+    <div class="container catalog__container">
+      <div class="catalog__header">
+        <div>
+          <p class="catalog__eyebrow">Workout filters</p>
+          <h2 class="catalog__title">Exercises</h2>
+        </div>
+        <div class="catalog__filters" role="tablist" aria-label="Filters">
+          <button
+            class="filter-btn is-active"
+            type="button"
+            data-filter="Muscles"
+            role="tab"
+            aria-selected="true"
+          >
+            Muscles
+          </button>
+          <button
+            class="filter-btn"
+            type="button"
+            data-filter="Body parts"
+            role="tab"
+            aria-selected="false"
+          >
+            Body parts
+          </button>
+          <button
+            class="filter-btn"
+            type="button"
+            data-filter="Equipment"
+            role="tab"
+            aria-selected="false"
+          >
+            Equipment
+          </button>
+        </div>
+      </div>
+
+      <form class="search-form" role="search" data-search-form>
+        <label class="search-form__label" for="search-input">Search exercises</label>
+        <div class="search-form__field">
+          <input
+            class="search-form__input"
+            id="search-input"
+            type="text"
+            name="keyword"
+            placeholder="Find an exercise"
+            autocomplete="off"
+          />
+          <button class="search-form__button" type="submit" aria-label="Search">
+            <span class="search-form__button-text">Search</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="catalog__body" data-catalog>
+        <div class="catalog__view" data-categories-view>
+          <ul class="card-grid" data-categories-list>
+            <li class="card card--category">
+              <div class="card__body">
+                <p class="card__label">Muscles</p>
+                <h3 class="card__title">Back</h3>
+                <p class="card__meta">120 exercises</p>
+              </div>
+            </li>
+            <li class="card card--category">
+              <div class="card__body">
+                <p class="card__label">Muscles</p>
+                <h3 class="card__title">Legs</h3>
+                <p class="card__meta">98 exercises</p>
+              </div>
+            </li>
+            <li class="card card--category">
+              <div class="card__body">
+                <p class="card__label">Muscles</p>
+                <h3 class="card__title">Chest</h3>
+                <p class="card__meta">76 exercises</p>
+              </div>
+            </li>
+          </ul>
+          <div class="pagination" data-pagination="categories"></div>
+        </div>
+
+        <div class="catalog__view is-hidden" data-exercises-view>
+          <div class="catalog__subheader">
+            <h3 class="catalog__subtitle">
+              Exercises / <span data-current-category>Back</span>
+            </h3>
+          </div>
+          <ul class="card-grid" data-exercises-list>
+            <li class="card card--exercise">
+              <div class="card__body">
+                <div class="card__header">
+                  <span class="card__badge">Workout</span>
+                  <button class="card__action" type="button">Start</button>
+                </div>
+                <h3 class="card__title">Wide grip pull-ups</h3>
+                <p class="card__meta">Body part: Back | Equipment: Bar</p>
+              </div>
+            </li>
+            <li class="card card--exercise">
+              <div class="card__body">
+                <div class="card__header">
+                  <span class="card__badge">Workout</span>
+                  <button class="card__action" type="button">Start</button>
+                </div>
+                <h3 class="card__title">Seated row</h3>
+                <p class="card__meta">Body part: Back | Equipment: Machine</p>
+              </div>
+            </li>
+          </ul>
+          <div class="pagination" data-pagination="exercises"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

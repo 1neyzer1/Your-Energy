@@ -1,0 +1,94 @@
+<div class="backdrop is-hidden" data-modal="exercise" aria-hidden="true">
+  <div class="modal modal--exercise" role="dialog" aria-modal="true" aria-labelledby="exercise-title">
+    <button class="modal__close" type="button" aria-label="Close exercise details">
+      <svg class="modal__close-icon" width="20" height="20" aria-hidden="true">
+        <use href="./img/sprite.svg#icon-close"></use>
+      </svg>
+    </button>
+    <div class="modal__content">
+      <div class="modal__media" data-exercise-preview>
+        <div class="modal__media-placeholder">Preview</div>
+      </div>
+      <div class="modal__details">
+        <h2 class="modal__title" id="exercise-title">Exercise title</h2>
+        <p class="modal__meta">Target: <span data-exercise-target>Back</span></p>
+        <p class="modal__meta">Body part: <span data-exercise-part>Back</span></p>
+        <p class="modal__meta">Equipment: <span data-exercise-equipment>Bar</span></p>
+        <p class="modal__desc" data-exercise-desc>
+          Exercise description goes here. It will be loaded from the API.
+        </p>
+        <div class="modal__actions">
+          <button class="btn btn--primary" type="button" data-action="toggle-favorite">
+            Add to favorites
+          </button>
+          <button class="btn btn--secondary" type="button" data-action="open-rating">
+            Give a rating
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop is-hidden" data-modal="rating" aria-hidden="true">
+  <div class="modal modal--rating" role="dialog" aria-modal="true" aria-labelledby="rating-title">
+    <button class="modal__close" type="button" aria-label="Close rating form">
+      <svg class="modal__close-icon" width="20" height="20" aria-hidden="true">
+        <use href="./img/sprite.svg#icon-close"></use>
+      </svg>
+    </button>
+    <div class="modal__content modal__content--stack">
+      <h2 class="modal__title" id="rating-title">
+        <svg class="modal__title-icon" width="20" height="20" aria-hidden="true">
+          <use href="./img/sprite.svg#icon-star"></use>
+        </svg>
+        Give a rating
+      </h2>
+      <form class="rating-form" data-rating-form>
+        <div class="rating-form__group" role="radiogroup" aria-label="Rating">
+          <label class="rating-form__option">
+            <input type="radio" name="rating" value="1" required />
+            <span>1</span>
+          </label>
+          <label class="rating-form__option">
+            <input type="radio" name="rating" value="2" required />
+            <span>2</span>
+          </label>
+          <label class="rating-form__option">
+            <input type="radio" name="rating" value="3" required />
+            <span>3</span>
+          </label>
+          <label class="rating-form__option">
+            <input type="radio" name="rating" value="4" required />
+            <span>4</span>
+          </label>
+          <label class="rating-form__option">
+            <input type="radio" name="rating" value="5" required />
+            <span>5</span>
+          </label>
+        </div>
+
+        <label class="rating-form__label" for="rating-email">Email</label>
+        <input
+          class="rating-form__input"
+          id="rating-email"
+          type="email"
+          name="email"
+          placeholder="you@email.com"
+          required
+        />
+
+        <label class="rating-form__label" for="rating-comment">Comment</label>
+        <textarea
+          class="rating-form__textarea"
+          id="rating-comment"
+          name="comment"
+          placeholder="Optional comment"
+          rows="4"
+        ></textarea>
+
+        <button class="btn btn--primary" type="submit">Send rating</button>
+      </form>
+    </div>
+  </div>
+</div>

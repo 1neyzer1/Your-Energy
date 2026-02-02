@@ -1,0 +1,137 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--color-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 20;
+}
+
+.modal {
+  width: min(100%, 640px);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  padding: 24px;
+}
+
+.modal--rating {
+  width: min(100%, 520px);
+}
+
+.modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-dark);
+}
+
+.modal__close-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.modal__content {
+  display: grid;
+  gap: 20px;
+}
+
+.modal__content--stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal__media {
+  background: #f4efe8;
+  border-radius: var(--radius-md);
+  padding: 24px;
+  text-align: center;
+}
+
+.modal__media-placeholder {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.modal__title {
+  font-family: var(--font-accent);
+  font-size: 24px;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal__title-icon {
+  color: var(--color-accent);
+  fill: currentColor;
+}
+
+.modal__meta {
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.modal__desc {
+  color: var(--color-text);
+  margin: 0;
+}
+
+.modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rating-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rating-form__group {
+  display: flex;
+  gap: 10px;
+}
+
+.rating-form__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+}
+
+.rating-form__label {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.rating-form__input,
+.rating-form__textarea {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+@media (min-width: 768px) {
+  .modal__content {
+    grid-template-columns: 220px 1fr;
+    align-items: start;
+  }
+}

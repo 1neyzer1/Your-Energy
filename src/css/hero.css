@@ -1,0 +1,165 @@
+.hero {
+  padding: 40px 0 32px;
+}
+
+.hero__container {
+  display: grid;
+  gap: 32px;
+}
+
+.hero__content {
+  max-width: 520px;
+}
+
+.hero__eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 12px;
+}
+
+.hero__title {
+  font-family: var(--font-accent);
+  font-size: clamp(32px, 6vw, 56px);
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+
+.hero__text {
+  color: var(--color-muted);
+  margin-bottom: 24px;
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+.hero__cta:hover,
+.hero__cta:focus {
+  background: var(--color-accent-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.hero__aside {
+  display: grid;
+  gap: 20px;
+}
+
+.hero__visual {
+  background: var(--color-hero);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.hero__image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+.quote-card,
+.daily-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.quote-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.quote-card__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  margin: 0;
+}
+
+.quote-card__icon {
+  color: var(--color-accent);
+  fill: currentColor;
+}
+
+.quote-card__date {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.quote-card__text {
+  font-size: 14px;
+  color: var(--color-text);
+  margin-bottom: 12px;
+}
+
+.quote-card__author {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.daily-card__value {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.daily-card__icon {
+  color: var(--color-accent);
+  fill: currentColor;
+}
+
+.daily-card__minutes {
+  font-family: var(--font-accent);
+  font-size: 40px;
+}
+
+.daily-card__unit {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-muted);
+}
+
+.daily-card__text {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 60px 0 40px;
+  }
+
+  .hero__container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero__aside {
+    gap: 24px;
+  }
+}
