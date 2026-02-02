@@ -9,7 +9,15 @@ export default defineConfig(({ command }) => {
     define: {
       [command === 'serve' ? 'global' : '_global']: {},
     },
+    base: command === 'serve' ? '/' : '/js-curse-project/',
     root: 'src',
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        },
+      },
+    },
     build: {
       sourcemap: true,
       rollupOptions: {
@@ -34,11 +42,15 @@ export default defineConfig(({ command }) => {
           },
         },
       },
-      outDir: '../dist',
+      outDir: '../docs',
       emptyOutDir: true,
     },
     plugins: [
-      injectHTML(),
+      injectHTML({
+        debug: {
+          logPath: true,
+        },
+      }),
       FullReload(['./src/**/**.html']),
       SortCss({
         sort: 'mobile-first',

@@ -1,0 +1,81 @@
+<div class="rating-modal" id="js-rating-modal">
+  <div class="rating-modal__overlay"></div>
+  <div class="rating-modal__content">
+    <button class="rating-modal__close" id="js-rating-modal-close" aria-label="Close modal">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+
+    <div class="rating-modal__body">
+      <h2 class="rating-modal__title">Rating</h2>
+
+      <div class="rating-modal__server-message" id="js-rating-server-message">
+        <span class="rating-modal__server-message-text" id="js-rating-server-message-text"></span>
+        <button class="rating-modal__server-message-close" id="js-rating-server-message-close" aria-label="Close message">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="rating-modal__rating">
+        <span class="rating-modal__rating-value" id="js-rating-modal-value">0.0</span>
+        <div class="rating-modal__rating-stars" id="js-rating-modal-stars">
+          <button class="rating-modal__star" data-rating="1" aria-label="1 star">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+          <button class="rating-modal__star" data-rating="2" aria-label="2 stars">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+          <button class="rating-modal__star" data-rating="3" aria-label="3 stars">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+          <button class="rating-modal__star" data-rating="4" aria-label="4 stars">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+          <button class="rating-modal__star" data-rating="5" aria-label="5 stars">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <form class="rating-modal__form" id="js-rating-modal-form">
+        <div class="rating-modal__field">
+          <div class="rating-modal__rating-error" id="js-rating-error"></div>
+        </div>
+
+        <div class="rating-modal__field">
+          <input type="email" class="rating-modal__input" id="js-rating-modal-email" placeholder="Email">
+          <div class="rating-modal__error" id="js-email-error"></div>
+        </div>
+
+        <div class="rating-modal__field">
+          <textarea class="rating-modal__textarea" id="js-rating-modal-comment" placeholder="Your comment"
+            rows="4"></textarea>
+          <div class="rating-modal__error" id="js-comment-error"></div>
+        </div>
+
+        <button type="submit" class="rating-modal__submit">
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

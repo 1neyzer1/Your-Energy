@@ -1,0 +1,13 @@
+/* Main CSS file - imports all modules */
+@use './fonts';
+@use './variables';
+@use './common';
+@use './header';
+@use './home';
+@use './exercises';
+@use './exercise-modal';
+@use './rating-modal';
+@use './global-notification';
+@use './footer';
+
+@import 'modern-normalize/modern-normalize.css';
