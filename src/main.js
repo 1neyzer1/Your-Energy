@@ -84,12 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
   filterButtons.forEach(button => {
     button.addEventListener('click', () => {
       // Видаляємо активний клас з усіх кнопок
-      filterButtons.forEach(btn =>
-        btn.classList.remove('exercises__content__header-filters-item--active')
-      );
+      filterButtons.forEach(btn => {
+        btn.classList.remove('exercises__content__header-filters-item--active');
+        btn.setAttribute('aria-pressed', 'false');
+      });
 
       // Додаємо активний клас до натиснутої кнопки
       button.classList.add('exercises__content__header-filters-item--active');
+      button.setAttribute('aria-pressed', 'true');
 
       // Отримуємо значення фільтра
       const filter = button.getAttribute('data-filter');
