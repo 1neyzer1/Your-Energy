@@ -193,6 +193,12 @@
       max-width: 444px;
       flex: 1;
 
+      &__info {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+      }
+
       &__quote {
         display: flex;
         gap: var(--spacing-lg);
@@ -226,6 +232,7 @@
         height: auto;
         display: block;
         object-fit: cover;
+        flex-shrink: 0;
       }
 
       &__norm {
@@ -236,6 +243,8 @@
         padding: var(--spacing-lg);
         border-radius: 20px;
         color: var(--color-dark);
+        flex: 1;
+        min-width: 0;
 
         &-context {
           &-title {
@@ -592,14 +601,31 @@
       flex-direction: column;
       gap: var(--spacing-2xl);
 
+      &__cards-container {
+        order: 1;
+      }
+
       &__aside {
         min-width: 0;
         max-width: 100%;
         width: 100%;
+        order: 2;
+
+        &__info {
+          flex-direction: row;
+          align-items: stretch;
+          gap: var(--spacing-md);
+        }
+
+        &__image {
+          width: 180px;
+          height: 100%;
+          align-self: stretch;
+        }
       }
 
       &__cards {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
 
         &--exercises {
           grid-template-columns: repeat(2, 1fr);
@@ -636,11 +662,31 @@
           width: 100%;
         }
       }
+
+      &-filters-item {
+        font-size: 14px;
+      }
+
+      &-title {
+        font-size: 28px;
+      }
     }
 
     &__main {
       &__aside {
         gap: var(--spacing-md);
+
+        &__info {
+          flex-direction: row;
+          align-items: center;
+          gap: var(--spacing-sm);
+        }
+
+        &__image {
+          width: 120px;
+          height: 100%;
+          align-self: stretch;
+        }
 
         &__quote {
           flex-direction: column;
