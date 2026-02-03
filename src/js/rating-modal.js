@@ -5,338 +5,340 @@ import {
   validateEmail,
 } from './form-validation.js';
 
-// Змінна для зберігання ID вправи для рейтингу
 let currentExerciseIdForRating = null;
+let onRatingSuccess = null;
+let listenersAttached = false;
 
-// Helper functions for server messages
+function getModalElements() {
+  const modal = document.getElementById('js-rating-modal');
+  if (!modal) return null;
+
+  return {
+    modal,
+    overlay: modal.querySelector('.rating-modal__overlay'),
+    closeBtn: document.getElementById('js-rating-modal-close'),
+    serverMessage: document.getElementById('js-rating-server-message'),
+    serverMessageText: document.getElementById('js-rating-server-message-text'),
+    serverMessageClose: document.getElementById('js-rating-server-message-close'),
+    ratingValue: document.getElementById('js-rating-modal-value'),
+    ratingError: document.getElementById('js-rating-error'),
+    form: document.getElementById('js-rating-modal-form'),
+    emailInput: document.getElementById('js-rating-modal-email'),
+    emailError: document.getElementById('js-email-error'),
+    commentTextarea: document.getElementById('js-rating-modal-comment'),
+    commentError: document.getElementById('js-comment-error'),
+    starInputs: Array.from(
+      modal.querySelectorAll('.rating-modal__star-input')
+    ),
+    starLabels: Array.from(modal.querySelectorAll('.rating-modal__star')),
+  };
+}
+
 function showServerMessage(message, type = 'error') {
-  const messageElement = document.getElementById('js-rating-server-message');
-  const messageTextElement = document.getElementById(
-    'js-rating-server-message-text'
-  );
-  if (!messageElement || !messageTextElement) return;
+  const elements = getModalElements();
+  if (!elements?.serverMessage || !elements.serverMessageText) return;
 
-  messageTextElement.textContent = message;
-  messageElement.classList.remove(
+  elements.serverMessageText.textContent = message;
+  elements.serverMessage.classList.remove(
     'rating-modal__server-message--error',
     'rating-modal__server-message--success'
   );
-  messageElement.classList.add(`rating-modal__server-message--${type}`);
-  messageElement.classList.add('rating-modal__server-message--visible');
+  elements.serverMessage.classList.add(`rating-modal__server-message--${type}`);
+  elements.serverMessage.classList.add('rating-modal__server-message--visible');
 }
 
 function hideServerMessage() {
-  const messageElement = document.getElementById('js-rating-server-message');
-  const messageTextElement = document.getElementById(
-    'js-rating-server-message-text'
-  );
-  if (!messageElement) return;
+  const elements = getModalElements();
+  if (!elements?.serverMessage) return;
 
-  messageElement.classList.remove('rating-modal__server-message--visible');
-  if (messageTextElement) {
-    messageTextElement.textContent = '';
+  elements.serverMessage.classList.remove('rating-modal__server-message--visible');
+  if (elements.serverMessageText) {
+    elements.serverMessageText.textContent = '';
   }
-  messageElement.classList.remove(
+  elements.serverMessage.classList.remove(
     'rating-modal__server-message--error',
     'rating-modal__server-message--success'
   );
 }
 
-// Функція для закриття модального вікна рейтингу
-function closeRatingModal() {
-  const modal = document.getElementById('js-rating-modal');
-  if (!modal) return;
-
-  modal.classList.remove('rating-modal--open');
-  document.body.style.overflow = '';
-  currentExerciseIdForRating = null;
-
-  // Clear all errors when closing
-  const emailInput = document.getElementById('js-rating-modal-email');
-  const emailError = document.getElementById('js-email-error');
-  const commentTextarea = document.getElementById('js-rating-modal-comment');
-  const commentError = document.getElementById('js-comment-error');
-  const ratingError = document.getElementById('js-rating-error');
-
-  hideFieldError(emailInput, emailError);
-  hideFieldError(commentTextarea, commentError);
-  hideFieldError(null, ratingError);
-  hideServerMessage();
+function getSelectedRating() {
+  const elements = getModalElements();
+  if (!elements) return 0;
+  const selected = elements.starInputs.find(input => input.checked);
+  return selected ? Number(selected.value) : 0;
 }
 
-// Функція для відкриття модального вікна рейтингу
-export function openRatingModal(exerciseId) {
-  const modal = document.getElementById('js-rating-modal');
-  if (!modal) return;
+function updateStars(rating) {
+  const elements = getModalElements();
+  if (!elements) return;
 
-  currentExerciseIdForRating = exerciseId;
-
-  // Скидаємо форму
-  const form = document.getElementById('js-rating-modal-form');
-  const emailInput = document.getElementById('js-rating-modal-email');
-  const commentTextarea = document.getElementById('js-rating-modal-comment');
-  const ratingValue = document.getElementById('js-rating-modal-value');
-  const stars = document.querySelectorAll('.rating-modal__star');
-
-  if (form) form.reset();
-  if (ratingValue) ratingValue.textContent = '0.0';
-
-  // Clear all errors
-  const emailError = document.getElementById('js-email-error');
-  const commentError = document.getElementById('js-comment-error');
-  const ratingError = document.getElementById('js-rating-error');
-  hideFieldError(emailInput, emailError);
-  hideFieldError(commentTextarea, commentError);
-  hideFieldError(null, ratingError);
-  hideServerMessage();
-
-  // Скидаємо активні зірки
-  stars.forEach(star => {
-    star.classList.remove('rating-modal__star--active');
-    const svg = star.querySelector('svg');
-    if (svg) {
-      const path = svg.querySelector('path');
+  elements.starLabels.forEach((label, index) => {
+    if (index < rating) {
+      label.classList.add('rating-modal__star--active');
+      const path = label.querySelector('path');
+      if (path) {
+        path.setAttribute('fill', '#EEA10C');
+        path.setAttribute('stroke', '#EEA10C');
+      }
+    } else {
+      label.classList.remove('rating-modal__star--active');
+      const path = label.querySelector('path');
       if (path) {
         path.setAttribute('fill', 'none');
         path.setAttribute('stroke', 'currentColor');
       }
     }
   });
+}
 
-  // Відкриваємо модальне вікно
-  modal.classList.add('rating-modal--open');
+function updateRatingValue(value) {
+  const elements = getModalElements();
+  if (elements?.ratingValue) {
+    elements.ratingValue.textContent = value.toFixed(1);
+  }
+}
+
+function resetRatingForm() {
+  const elements = getModalElements();
+  if (!elements) return;
+
+  if (elements.form) elements.form.reset();
+  elements.starInputs.forEach(input => {
+    input.checked = false;
+  });
+  updateStars(0);
+  updateRatingValue(0);
+
+  hideFieldError(elements.emailInput, elements.emailError);
+  hideFieldError(elements.commentTextarea, elements.commentError);
+  hideFieldError(null, elements.ratingError);
+  hideServerMessage();
+}
+
+function handleClose() {
+  closeRatingModal();
+}
+
+function handleOverlayClick(event) {
+  if (event.target === event.currentTarget) {
+    closeRatingModal();
+  }
+}
+
+function handleKeydown(event) {
+  if (event.key === 'Escape') {
+    closeRatingModal();
+  }
+}
+
+function handleStarChange(event) {
+  const rating = Number(event.target.value);
+  updateStars(rating);
+  updateRatingValue(rating);
+  const elements = getModalElements();
+  if (elements?.ratingError) {
+    hideFieldError(null, elements.ratingError);
+  }
+}
+
+function handleStarHover(event) {
+  const rating = Number(event.currentTarget.dataset.rating || 0);
+  updateStars(rating);
+}
+
+function handleStarLeave() {
+  const selectedRating = getSelectedRating();
+  updateStars(selectedRating);
+}
+
+function handleEmailInput() {
+  const elements = getModalElements();
+  if (elements) {
+    hideFieldError(elements.emailInput, elements.emailError);
+  }
+}
+
+function handleCommentInput() {
+  const elements = getModalElements();
+  if (elements) {
+    hideFieldError(elements.commentTextarea, elements.commentError);
+  }
+}
+
+function handleServerMessageClose() {
+  hideServerMessage();
+}
+
+function handleFormSubmit(event) {
+  event.preventDefault();
+  const elements = getModalElements();
+  if (!elements) return;
+
+  const selectedRating = getSelectedRating();
+  const email = elements.emailInput?.value.trim() || '';
+  const review = elements.commentTextarea?.value.trim() || '';
+
+  let hasErrors = false;
+
+  if (!selectedRating) {
+    showFieldError(null, elements.ratingError, 'Please select a rating');
+    hasErrors = true;
+  } else {
+    hideFieldError(null, elements.ratingError);
+  }
+
+  if (!email) {
+    showFieldError(elements.emailInput, elements.emailError, 'Please enter your email');
+    hasErrors = true;
+  } else if (!validateEmail(email)) {
+    showFieldError(
+      elements.emailInput,
+      elements.emailError,
+      'Please enter a valid email address'
+    );
+    hasErrors = true;
+  } else {
+    hideFieldError(elements.emailInput, elements.emailError);
+  }
+
+  if (!review) {
+    showFieldError(
+      elements.commentTextarea,
+      elements.commentError,
+      'Please enter your comment'
+    );
+    hasErrors = true;
+  } else {
+    hideFieldError(elements.commentTextarea, elements.commentError);
+  }
+
+  if (hasErrors || !currentExerciseIdForRating) {
+    return;
+  }
+
+  hideServerMessage();
+
+  fetch(
+    `https://your-energy.b.goit.study/api/exercises/${currentExerciseIdForRating}/rating`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        rate: selectedRating,
+        email,
+        review,
+      }),
+    }
+  )
+    .then(async response => {
+      const data = await response.json();
+      if (!response.ok) {
+        throw { message: data.message, data };
+      }
+      return data;
+    })
+    .then(data => {
+      const exerciseName = data.name || 'the exercise';
+      const exerciseId = currentExerciseIdForRating;
+      const successCallback = onRatingSuccess;
+      closeRatingModal();
+      showGlobalNotification(
+        `Thank you, your review for exercise ${exerciseName} has been submitted`,
+        'success'
+      );
+      if (successCallback && exerciseId) {
+        successCallback(exerciseId);
+      }
+    })
+    .catch(error => {
+      const errorMessage =
+        error.message || 'Failed to submit rating. Please try again.';
+      showServerMessage(errorMessage, 'error');
+    });
+}
+
+function attachListeners() {
+  if (listenersAttached) return;
+  const elements = getModalElements();
+  if (!elements) return;
+
+  elements.closeBtn?.addEventListener('click', handleClose);
+  elements.overlay?.addEventListener('click', handleOverlayClick);
+  elements.serverMessageClose?.addEventListener(
+    'click',
+    handleServerMessageClose
+  );
+  elements.form?.addEventListener('submit', handleFormSubmit);
+  elements.emailInput?.addEventListener('input', handleEmailInput);
+  elements.commentTextarea?.addEventListener('input', handleCommentInput);
+  elements.starInputs.forEach(input =>
+    input.addEventListener('change', handleStarChange)
+  );
+  elements.starLabels.forEach(label => {
+    label.addEventListener('mouseenter', handleStarHover);
+    label.addEventListener('mouseleave', handleStarLeave);
+  });
+  document.addEventListener('keydown', handleKeydown);
+
+  listenersAttached = true;
+}
+
+function detachListeners() {
+  if (!listenersAttached) return;
+  const elements = getModalElements();
+  if (!elements) return;
+
+  elements.closeBtn?.removeEventListener('click', handleClose);
+  elements.overlay?.removeEventListener('click', handleOverlayClick);
+  elements.serverMessageClose?.removeEventListener(
+    'click',
+    handleServerMessageClose
+  );
+  elements.form?.removeEventListener('submit', handleFormSubmit);
+  elements.emailInput?.removeEventListener('input', handleEmailInput);
+  elements.commentTextarea?.removeEventListener('input', handleCommentInput);
+  elements.starInputs.forEach(input =>
+    input.removeEventListener('change', handleStarChange)
+  );
+  elements.starLabels.forEach(label => {
+    label.removeEventListener('mouseenter', handleStarHover);
+    label.removeEventListener('mouseleave', handleStarLeave);
+  });
+  document.removeEventListener('keydown', handleKeydown);
+
+  listenersAttached = false;
+}
+
+export function openRatingModal(exerciseId, options = {}) {
+  const elements = getModalElements();
+  if (!elements) return;
+
+  currentExerciseIdForRating = exerciseId;
+  onRatingSuccess = options.onSuccess || null;
+
+  resetRatingForm();
+  attachListeners();
+
+  elements.modal.classList.add('rating-modal--open');
   document.body.style.overflow = 'hidden';
 }
 
-// Експорт функції закриття для використання в інших модулях
+function closeRatingModal() {
+  const elements = getModalElements();
+  if (!elements) return;
+
+  detachListeners();
+
+  elements.modal.classList.remove('rating-modal--open');
+  document.body.style.overflow = '';
+  currentExerciseIdForRating = null;
+  onRatingSuccess = null;
+}
+
 export { closeRatingModal };
 
-// Ініціалізація event listeners для модального вікна рейтингу
 export function initRatingModal() {
-  // Обробники для модального вікна рейтингу
-  const ratingModalCloseBtn = document.getElementById('js-rating-modal-close');
-  const ratingModal = document.getElementById('js-rating-modal');
-  const ratingModalOverlay = ratingModal?.querySelector(
-    '.rating-modal__overlay'
-  );
-
-  if (ratingModalCloseBtn) {
-    ratingModalCloseBtn.addEventListener('click', closeRatingModal);
-  }
-
-  if (ratingModalOverlay) {
-    ratingModalOverlay.addEventListener('click', closeRatingModal);
-  }
-
-  // Обробник для закриття серверного повідомлення
-  const serverMessageCloseBtn = document.getElementById(
-    'js-rating-server-message-close'
-  );
-  if (serverMessageCloseBtn) {
-    serverMessageCloseBtn.addEventListener('click', hideServerMessage);
-  }
-
-  // Обробка зірок рейтингу
-  const ratingStars = document.querySelectorAll('.rating-modal__star');
-  const ratingValue = document.getElementById('js-rating-modal-value');
-  let selectedRating = 0;
-
-  ratingStars.forEach((star, index) => {
-    star.addEventListener('click', () => {
-      selectedRating = index + 1;
-
-      if (ratingValue) {
-        ratingValue.textContent = selectedRating.toFixed(1);
-      }
-
-      // Оновлюємо зірки
-      ratingStars.forEach((s, i) => {
-        if (i < selectedRating) {
-          s.classList.add('rating-modal__star--active');
-          const svg = s.querySelector('svg');
-          if (svg) {
-            const path = svg.querySelector('path');
-            if (path) {
-              path.setAttribute('fill', '#EEA10C');
-              path.setAttribute('stroke', '#EEA10C');
-            }
-          }
-        } else {
-          s.classList.remove('rating-modal__star--active');
-          const svg = s.querySelector('svg');
-          if (svg) {
-            const path = svg.querySelector('path');
-            if (path) {
-              path.setAttribute('fill', 'none');
-              path.setAttribute('stroke', 'currentColor');
-            }
-          }
-        }
-      });
-    });
-
-    // Hover ефект
-    star.addEventListener('mouseenter', () => {
-      const hoverRating = index + 1;
-      ratingStars.forEach((s, i) => {
-        if (
-          i < hoverRating &&
-          !s.classList.contains('rating-modal__star--active')
-        ) {
-          s.style.color = 'rgba(255, 255, 255, 0.6)';
-        }
-      });
-    });
-
-    star.addEventListener('mouseleave', () => {
-      ratingStars.forEach((s, i) => {
-        if (!s.classList.contains('rating-modal__star--active')) {
-          s.style.color = 'rgba(255, 255, 255, 0.3)';
-        }
-      });
-    });
-  });
-
-  // Add input event listeners to clear errors on input
-  const emailInput = document.getElementById('js-rating-modal-email');
-  const emailError = document.getElementById('js-email-error');
-  const commentTextarea = document.getElementById('js-rating-modal-comment');
-  const commentError = document.getElementById('js-comment-error');
-
-  if (emailInput && emailError) {
-    emailInput.addEventListener('input', () => {
-      hideFieldError(emailInput, emailError);
-    });
-  }
-
-  if (commentTextarea && commentError) {
-    commentTextarea.addEventListener('input', () => {
-      hideFieldError(commentTextarea, commentError);
-    });
-  }
-
-  // Clear rating error when selecting a star
-  ratingStars.forEach(star => {
-    star.addEventListener('click', () => {
-      const ratingError = document.getElementById('js-rating-error');
-      if (ratingError) {
-        hideFieldError(null, ratingError);
-      }
-    });
-  });
-
-  // Обробка форми рейтингу
-  const ratingForm = document.getElementById('js-rating-modal-form');
-  if (ratingForm) {
-    ratingForm.addEventListener('submit', e => {
-      e.preventDefault();
-
-      const ratingStars = document.querySelectorAll('.rating-modal__star');
-      const ratingValue = document.getElementById('js-rating-modal-value');
-      const emailInput = document.getElementById('js-rating-modal-email');
-      const commentTextarea = document.getElementById(
-        'js-rating-modal-comment'
-      );
-      const emailError = document.getElementById('js-email-error');
-      const commentError = document.getElementById('js-comment-error');
-      const ratingError = document.getElementById('js-rating-error');
-
-      let selectedRating = 0;
-      let hasErrors = false;
-
-      // Знаходимо вибраний рейтинг
-      ratingStars.forEach((star, index) => {
-        if (star.classList.contains('rating-modal__star--active')) {
-          selectedRating = Math.max(selectedRating, index + 1);
-        }
-      });
-
-      // Validate rating
-      if (selectedRating === 0) {
-        showFieldError(null, ratingError, 'Please select a rating');
-        hasErrors = true;
-      } else {
-        hideFieldError(null, ratingError);
-      }
-
-      const email = emailInput?.value.trim() || '';
-      const review = commentTextarea?.value.trim() || '';
-
-      // Validate email
-      if (!email) {
-        showFieldError(emailInput, emailError, 'Please enter your email');
-        hasErrors = true;
-      } else if (!validateEmail(email)) {
-        showFieldError(
-          emailInput,
-          emailError,
-          'Please enter a valid email address'
-        );
-        hasErrors = true;
-      } else {
-        hideFieldError(emailInput, emailError);
-      }
-
-      // Validate comment
-      if (!review) {
-        showFieldError(
-          commentTextarea,
-          commentError,
-          'Please enter your comment'
-        );
-        hasErrors = true;
-      } else {
-        hideFieldError(commentTextarea, commentError);
-      }
-
-      // Stop if there are errors
-      if (hasErrors) {
-        return;
-      }
-
-      // Відправка рейтингу на сервер
-      if (currentExerciseIdForRating) {
-        // Clear previous server messages
-        hideServerMessage();
-
-        fetch(
-          `https://your-energy.b.goit.study/api/exercises/${currentExerciseIdForRating}/rating`,
-          {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              rate: selectedRating,
-              email,
-              review,
-            }),
-          }
-        )
-          .then(async response => {
-            const data = await response.json();
-
-            if (!response.ok) {
-              // Get error message from server or use default
-              throw { message: data.message, data };
-            }
-
-            return data;
-          })
-          .then(data => {
-            closeRatingModal();
-            const exerciseName = data.name || 'the exercise';
-            showGlobalNotification(
-              `Thank you, your review for exercise ${exerciseName} has been submitted`,
-              'success'
-            );
-          })
-          .catch(error => {
-            const errorMessage =
-              error.message || 'Failed to submit rating. Please try again.';
-            showServerMessage(errorMessage, 'error');
-          });
-      }
-    });
-  }
+  getModalElements();
 }

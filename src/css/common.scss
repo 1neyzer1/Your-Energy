@@ -7,6 +7,18 @@ body {
   font-family: var(--font-family);
 }
 
+@media (max-width: 1279px) {
+  body {
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    padding: 0 var(--spacing-md);
+  }
+}
+
 /* Form validation error styles */
 .form-error {
   font-family: var(--font-family);

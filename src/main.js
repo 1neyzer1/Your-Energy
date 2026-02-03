@@ -1,11 +1,12 @@
 import {
   loadExerciseCards,
-  updateBreadcrumbs,
+  switchToHome,
+  switchToFavorites,
   initSearch,
   initCardsEventListener,
 } from './js/exercises.js';
-import { initExerciseModal, closeExerciseModal } from './js/exercise-modal.js';
-import { initRatingModal, closeRatingModal } from './js/rating-modal.js';
+import { initExerciseModal } from './js/exercise-modal.js';
+import { initRatingModal } from './js/rating-modal.js';
 import {
   initGlobalNotification,
   showGlobalNotification,
@@ -37,11 +38,13 @@ async function subscribeToNewsletter(email) {
       }
     );
 
+    const data = await response.json().catch(() => null);
+
     if (!response.ok) {
-      throw new Error('Failed to subscribe');
+      const message = data?.message || 'Failed to subscribe';
+      throw new Error(message);
     }
 
-    const data = await response.json();
     return { success: true, data };
   } catch (error) {
     return { success: false, error: error.message };
@@ -66,16 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Ініціалізація слухача подій на контейнері карток (event delegation)
   initCardsEventListener();
 
-  // Початкове завантаження карток
-  loadExerciseCards('Muscles', 1);
-
-  // Закриття по Escape
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      closeExerciseModal();
-      closeRatingModal();
-    }
-  });
+  const initialPage = document.body?.dataset.page || 'home';
+  if (initialPage === 'favorites') {
+    switchToFavorites();
+  } else {
+    switchToHome();
+  }
 
   // Обробка кліків на фільтри
   const filterButtons = document.querySelectorAll(
@@ -94,8 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Отримуємо значення фільтра
       const filter = button.getAttribute('data-filter');
-      updateBreadcrumbs(null); // Оновлюємо breadcrumbs
-
       // Завантажуємо нові картки
       loadExerciseCards(filter, 1);
     });

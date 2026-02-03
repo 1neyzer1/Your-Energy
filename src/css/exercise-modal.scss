@@ -91,6 +91,21 @@
     }
   }
 
+  &__video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: none;
+  }
+
+  &__video.is-visible {
+    display: block;
+  }
+
+  &__image img.is-hidden {
+    display: none;
+  }
+
   &__info {
     flex: 1;
     display: flex;
@@ -259,4 +274,3 @@
     }
   }
 }
-

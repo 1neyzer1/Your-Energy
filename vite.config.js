@@ -9,7 +9,7 @@ export default defineConfig(({ command }) => {
     define: {
       [command === 'serve' ? 'global' : '_global']: {},
     },
-    base: command === 'serve' ? '/' : '/js-curse-project/',
+    base: command === 'serve' ? '/' : '/Your-Energy/',
     root: 'src',
     css: {
       preprocessorOptions: {
@@ -42,7 +42,7 @@ export default defineConfig(({ command }) => {
           },
         },
       },
-      outDir: '../docs',
+      outDir: '../dist',
       emptyOutDir: true,
     },
     plugins: [

@@ -3,7 +3,7 @@
     <div class="home__text">
       <h1 class="home__title">
         <span class="home__title-decor">
-          <img src="/img/svg/sun.svg" alt="Sun">
+          <img src="./images/svg/sun.svg" alt="Sun" loading="lazy" decoding="async">
         </span>
         Get <span class="home__title-italic">Body</span> in shape, Stay healthy
       </h1>
@@ -14,17 +14,33 @@
     </div>
     <div class="home__sidebar">
       <div class="home__image-small">
-        <img src="./img/f160f7810cea23bed860734e12e1a81def3d668a.jpg" alt="Women exercising outdoors">
+        <img
+          src="./images/home-thumb-168.jpg"
+          srcset="./images/home-thumb-168.jpg 1x, ./images/home-thumb-336.jpg 2x"
+          width="168"
+          height="100"
+          alt="Women exercising outdoors"
+          decoding="async"
+        >
       </div>
       <div class="home__hashtags">
-        <div class="home__hashtags-item">#Sport</div>
-        <div class="home__hashtags-item">#Healthy</div>
-        <div class="home__hashtags-item">#Workout</div>
-        <div class="home__hashtags-item">#Diet</div>
+        <button class="home__hashtags-item" type="button">#Sport</button>
+        <button class="home__hashtags-item" type="button">#Healthy</button>
+        <button class="home__hashtags-item" type="button">#Workout</button>
+        <button class="home__hashtags-item" type="button">#Diet</button>
       </div>
     </div>
   </div>
   <div class="home__hero">
-    <img src="./img/71236a8cc6b04d6a87e15feef63b9cb64728b379.jpg" alt="Abductors exercise">
+    <img
+      src="./images/home-hero-1200.jpg"
+      srcset="./images/home-hero-800.jpg 800w, ./images/home-hero-1200.jpg 1200w, ./images/home-hero-2400.jpg 2400w"
+      sizes="(max-width: 767px) 100vw, (max-width: 1279px) 90vw, 1200px"
+      width="1200"
+      height="400"
+      alt="Abductors exercise"
+      decoding="async"
+      fetchpriority="high"
+    >
   </div>
 </section>

@@ -169,6 +169,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 
     &:hover {
       color: rgba(255, 255, 255, 0.6);
@@ -192,6 +193,14 @@
     svg path {
       transition: fill 0.2s ease, stroke 0.2s ease;
     }
+  }
+
+  &__star-input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
   }
 
   &__form {
@@ -292,4 +301,3 @@
     }
   }
 }
-

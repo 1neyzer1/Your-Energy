@@ -1,61 +1,160 @@
 import { openRatingModal } from './rating-modal.js';
-import {
-  isFavorite,
-  toggleFavorite,
-} from './favorites.js';
+import { isFavorite, toggleFavorite } from './favorites.js';
 import { getCurrentPage } from './header.js';
 import { loadFavoritesExercises } from './exercises.js';
 
-// Змінна для зберігання ID вправи для рейтингу
 let currentExerciseIdForRating = null;
+let listenersAttached = false;
 
-// Функція для закриття модального вікна
-function closeExerciseModal() {
+function getModalElements() {
   const modal = document.getElementById('js-exercise-modal');
-  if (!modal) return;
+  if (!modal) return null;
 
-  modal.classList.remove('exercise-modal--open');
-  document.body.style.overflow = '';
+  return {
+    modal,
+    overlay: modal.querySelector('.exercise-modal__overlay'),
+    closeBtn: document.getElementById('js-exercise-modal-close'),
+    image: document.getElementById('js-exercise-modal-image'),
+    video: document.getElementById('js-exercise-modal-video'),
+    title: document.getElementById('js-exercise-modal-title'),
+    ratingValue: modal.querySelector('.exercise-modal__rating-value'),
+    ratingStars: modal.querySelector('.exercise-modal__rating-stars'),
+    target: document.getElementById('js-exercise-modal-target'),
+    bodyPart: document.getElementById('js-exercise-modal-body-part'),
+    equipment: document.getElementById('js-exercise-modal-equipment'),
+    popular: document.getElementById('js-exercise-modal-popular'),
+    calories: document.getElementById('js-exercise-modal-calories'),
+    time: document.getElementById('js-exercise-modal-time'),
+    description: document.getElementById('js-exercise-modal-description'),
+    favoriteBtn: document.getElementById('js-exercise-modal-favorites'),
+    ratingBtn: document.getElementById('js-exercise-modal-rating-btn'),
+  };
 }
 
-// Функція для відкриття модального вікна з даними вправи
-export function openExerciseModal(exerciseId) {
-  const modal = document.getElementById('js-exercise-modal');
-  if (!modal) return;
+function handleClose() {
+  closeExerciseModal();
+}
 
-  // Зберігаємо ID вправи для рейтингу
+function handleOverlayClick(event) {
+  if (event.target === event.currentTarget) {
+    closeExerciseModal();
+  }
+}
+
+function handleKeydown(event) {
+  if (event.key === 'Escape') {
+    closeExerciseModal();
+  }
+}
+
+function handleFavoriteClick() {
+  const exerciseId = currentExerciseIdForRating;
+  if (!exerciseId) return;
+
+  const wasAdded = toggleFavorite(exerciseId);
+  updateFavoriteButton(exerciseId);
+
+  if (!wasAdded && getCurrentPage() === 'favorites') {
+    closeExerciseModal();
+    loadFavoritesExercises();
+  }
+}
+
+function handleRatingClick() {
+  const exerciseId = currentExerciseIdForRating;
+  if (!exerciseId) return;
+
+  closeExerciseModal();
+  openRatingModal(exerciseId, {
+    onSuccess: () => openExerciseModal(exerciseId),
+  });
+}
+
+function attachListeners() {
+  if (listenersAttached) return;
+  const elements = getModalElements();
+  if (!elements) return;
+
+  elements.closeBtn?.addEventListener('click', handleClose);
+  elements.overlay?.addEventListener('click', handleOverlayClick);
+  elements.favoriteBtn?.addEventListener('click', handleFavoriteClick);
+  elements.ratingBtn?.addEventListener('click', handleRatingClick);
+  document.addEventListener('keydown', handleKeydown);
+
+  listenersAttached = true;
+}
+
+function detachListeners() {
+  if (!listenersAttached) return;
+  const elements = getModalElements();
+  if (!elements) return;
+
+  elements.closeBtn?.removeEventListener('click', handleClose);
+  elements.overlay?.removeEventListener('click', handleOverlayClick);
+  elements.favoriteBtn?.removeEventListener('click', handleFavoriteClick);
+  elements.ratingBtn?.removeEventListener('click', handleRatingClick);
+  document.removeEventListener('keydown', handleKeydown);
+
+  listenersAttached = false;
+}
+
+function updateFavoriteButton(exerciseId) {
+  const elements = getModalElements();
+  if (!elements?.favoriteBtn) return;
+
+  const isInFavorites = isFavorite(exerciseId);
+  const btnText = elements.favoriteBtn.querySelector('span');
+  const btnIcon = elements.favoriteBtn.querySelector('svg path');
+
+  if (isInFavorites) {
+    elements.favoriteBtn.classList.add('active');
+    if (btnText) btnText.textContent = 'Remove from favorites';
+    if (btnIcon) {
+      btnIcon.setAttribute('fill', 'currentColor');
+      btnIcon.removeAttribute('stroke');
+      btnIcon.removeAttribute('stroke-width');
+    }
+  } else {
+    elements.favoriteBtn.classList.remove('active');
+    if (btnText) btnText.textContent = 'Add to favorites';
+    if (btnIcon) {
+      btnIcon.setAttribute('fill', 'none');
+      btnIcon.setAttribute('stroke', 'currentColor');
+      btnIcon.setAttribute('stroke-width', '2');
+    }
+  }
+}
+
+export function openExerciseModal(exerciseId) {
+  const elements = getModalElements();
+  if (!elements) return;
+
   currentExerciseIdForRating = exerciseId;
 
-  // Показуємо модальне вікно з індикатором завантаження
-  modal.classList.add('exercise-modal--open');
+  elements.modal.classList.add('exercise-modal--open');
   document.body.style.overflow = 'hidden';
 
-  // Отримуємо елементи для заповнення
-  const image = document.getElementById('js-exercise-modal-image');
-  const title = document.getElementById('js-exercise-modal-title');
-  const ratingValue = document.querySelector('.exercise-modal__rating-value');
-  const ratingStars = document.querySelector('.exercise-modal__rating-stars');
-  const target = document.getElementById('js-exercise-modal-target');
-  const bodyPart = document.getElementById('js-exercise-modal-body-part');
-  const equipment = document.getElementById('js-exercise-modal-equipment');
-  const popular = document.getElementById('js-exercise-modal-popular');
-  const calories = document.getElementById('js-exercise-modal-calories');
-  const time = document.getElementById('js-exercise-modal-time');
-  const description = document.getElementById('js-exercise-modal-description');
+  attachListeners();
 
-  // Очищаємо попередні дані
-  if (title) title.textContent = 'Loading...';
-  if (ratingValue) ratingValue.textContent = '0.0';
-  if (target) target.textContent = '';
-  if (bodyPart) bodyPart.textContent = '';
-  if (equipment) equipment.textContent = '';
-  if (popular) popular.textContent = '0';
-  if (calories) calories.textContent = '0';
-  if (time) time.textContent = '/0 min';
-  if (description) description.textContent = '';
-  if (image) image.src = '';
+  if (elements.title) elements.title.textContent = 'Loading...';
+  if (elements.ratingValue) elements.ratingValue.textContent = '0.0';
+  if (elements.target) elements.target.textContent = '';
+  if (elements.bodyPart) elements.bodyPart.textContent = '';
+  if (elements.equipment) elements.equipment.textContent = '';
+  if (elements.popular) elements.popular.textContent = '0';
+  if (elements.calories) elements.calories.textContent = '0';
+  if (elements.time) elements.time.textContent = '/0 min';
+  if (elements.description) elements.description.textContent = '';
+  if (elements.image) {
+    elements.image.src = '';
+    elements.image.classList.remove('is-hidden');
+  }
+  if (elements.video) {
+    elements.video.src = '';
+    elements.video.classList.remove('is-visible');
+    elements.video.pause();
+  }
 
-  // Завантажуємо детальну інформацію про вправу
   fetch(`https://your-energy.b.goit.study/api/exercises/${exerciseId}`)
     .then(response => {
       if (!response.ok) {
@@ -64,24 +163,39 @@ export function openExerciseModal(exerciseId) {
       return response.json();
     })
     .then(exercise => {
-      // Заповнюємо дані модального вікна
-      if (image) image.src = exercise.gifUrl || '';
-      if (title) title.textContent = exercise.name || '';
-      if (target) target.textContent = exercise.target || '';
-      if (bodyPart) bodyPart.textContent = exercise.bodyPart || '';
-      if (equipment) equipment.textContent = exercise.equipment || '';
-      if (popular) popular.textContent = exercise.popularity || 0;
-      if (calories) calories.textContent = exercise.burnedCalories || 0;
-      if (time) time.textContent = `/${exercise.time || 0} min`;
-      if (description) description.textContent = exercise.description || '';
+      const videoUrl = exercise.videoUrl || exercise.video || exercise.videoURL;
 
-      // Оновлюємо рейтинг
-      if (ratingValue) {
-        ratingValue.textContent = (exercise.rating || 0).toFixed(1);
+      if (videoUrl && elements.video) {
+        elements.video.src = videoUrl;
+        elements.video.classList.add('is-visible');
+        if (elements.image) {
+          elements.image.classList.add('is-hidden');
+        }
+      } else if (elements.image) {
+        elements.image.src = exercise.gifUrl || '';
       }
 
-      if (ratingStars) {
-        const stars = ratingStars.querySelectorAll(
+      if (elements.title) elements.title.textContent = exercise.name || '';
+      if (elements.target) elements.target.textContent = exercise.target || '';
+      if (elements.bodyPart)
+        elements.bodyPart.textContent = exercise.bodyPart || '';
+      if (elements.equipment)
+        elements.equipment.textContent = exercise.equipment || '';
+      if (elements.popular)
+        elements.popular.textContent = exercise.popularity || 0;
+      if (elements.calories)
+        elements.calories.textContent = exercise.burnedCalories || 0;
+      if (elements.time)
+        elements.time.textContent = `/${exercise.time || 0} min`;
+      if (elements.description)
+        elements.description.textContent = exercise.description || '';
+
+      if (elements.ratingValue) {
+        elements.ratingValue.textContent = (exercise.rating || 0).toFixed(1);
+      }
+
+      if (elements.ratingStars) {
+        const stars = elements.ratingStars.querySelectorAll(
           '.exercise-modal__rating-star'
         );
         const rating = Math.round(exercise.rating || 0);
@@ -100,92 +214,33 @@ export function openExerciseModal(exerciseId) {
         });
       }
 
-      // Оновлюємо стан кнопки Favorites
       updateFavoriteButton(exerciseId);
-
-      // Підключення кнопки "Give a rating"
-      const ratingBtn = document.getElementById('js-exercise-modal-rating-btn');
-      if (ratingBtn) {
-        // Видаляємо попередні обробники
-        const newRatingBtn = ratingBtn.cloneNode(true);
-        ratingBtn.parentNode.replaceChild(newRatingBtn, ratingBtn);
-
-        newRatingBtn.addEventListener('click', () => {
-          closeExerciseModal();
-          openRatingModal(exerciseId);
-        });
-      }
     })
-    .catch(error => {
-      if (title) title.textContent = 'Error loading exercise';
-      if (description)
-        description.textContent =
+    .catch(() => {
+      if (elements.title) elements.title.textContent = 'Error loading exercise';
+      if (elements.description)
+        elements.description.textContent =
           'Failed to load exercise details. Please try again later.';
     });
 }
 
-// Функція для оновлення стану кнопки Favorites
-function updateFavoriteButton(exerciseId) {
-  const favoriteBtn = document.getElementById('js-exercise-modal-favorites');
-  if (!favoriteBtn) return;
+export function closeExerciseModal() {
+  const elements = getModalElements();
+  if (!elements) return;
 
-  const isInFavorites = isFavorite(exerciseId);
-  const btnText = favoriteBtn.querySelector('span');
-  const btnIcon = favoriteBtn.querySelector('svg path');
+  detachListeners();
 
-  if (isInFavorites) {
-    favoriteBtn.classList.add('active');
-    if (btnText) btnText.textContent = 'Remove from favorites';
-    if (btnIcon) {
-      btnIcon.setAttribute('fill', 'currentColor');
-      btnIcon.removeAttribute('stroke');
-      btnIcon.removeAttribute('stroke-width');
-    }
-  } else {
-    favoriteBtn.classList.remove('active');
-    if (btnText) btnText.textContent = 'Add to favorites';
-    if (btnIcon) {
-      btnIcon.setAttribute('fill', 'none');
-      btnIcon.setAttribute('stroke', 'currentColor');
-      btnIcon.setAttribute('stroke-width', '2');
-    }
+  elements.modal.classList.remove('exercise-modal--open');
+  document.body.style.overflow = '';
+  currentExerciseIdForRating = null;
+
+  if (elements.video) {
+    elements.video.pause();
+    elements.video.src = '';
+    elements.video.classList.remove('is-visible');
   }
 }
 
-// Експорт функції закриття для використання в інших модулях
-export { closeExerciseModal };
-
-// Ініціалізація event listeners для модального вікна
 export function initExerciseModal() {
-  // Обробники для модального вікна
-  const modalCloseBtn = document.getElementById('js-exercise-modal-close');
-  const modal = document.getElementById('js-exercise-modal');
-  const modalOverlay = modal?.querySelector('.exercise-modal__overlay');
-
-  if (modalCloseBtn) {
-    modalCloseBtn.addEventListener('click', closeExerciseModal);
-  }
-
-  if (modalOverlay) {
-    modalOverlay.addEventListener('click', closeExerciseModal);
-  }
-
-  // Обробник для кнопки Favorites
-  const favoriteBtn = document.getElementById('js-exercise-modal-favorites');
-  if (favoriteBtn) {
-    favoriteBtn.addEventListener('click', () => {
-      const exerciseId = currentExerciseIdForRating;
-      if (!exerciseId) return;
-
-      const wasAdded = toggleFavorite(exerciseId);
-      updateFavoriteButton(exerciseId);
-
-      // Якщо користувач на сторінці Favorites і видаляє вправу
-      if (!wasAdded && getCurrentPage() === 'favorites') {
-        closeExerciseModal();
-        loadFavoritesExercises();
-      }
-    });
-  }
+  getModalElements();
 }
-

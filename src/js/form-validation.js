@@ -56,7 +56,7 @@ export function hideFieldError(inputElement, errorElement) {
  * @returns {boolean} True if email is valid, false otherwise
  */
 export function validateEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^\w+(\.\w+)?@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
   return emailRegex.test(email);
 }
 
@@ -68,4 +68,3 @@ export function validateEmail(email) {
 export function validateRequired(value) {
   return value.trim().length > 0;
 }
-

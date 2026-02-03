@@ -1,6 +1,7 @@
 .footer {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
+  grid-template-areas: "brand message subscribe";
   gap: var(--spacing-2xl);
   background-color: var(--color-dark);
   color: var(--color-light);
@@ -8,20 +9,30 @@
   font-family: var(--font-family);
 
   &__brand {
+    grid-area: brand;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xl);
   }
 
   &__brand-logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
     img {
       display: block;
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
     }
   }
 
   &__socials {
     display: flex;
     gap: var(--spacing-sm);
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
   &__socials-link {
@@ -53,6 +64,7 @@
   }
 
   &__message {
+    grid-area: message;
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -89,6 +101,7 @@
   }
 
   &__subscribe {
+    grid-area: subscribe;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
@@ -159,5 +172,41 @@
     font-size: 14px;
     color: rgba(244, 244, 244, 0.6);
     margin-top: auto;
+  }
+}
+
+@media (max-width: 1279px) {
+  .footer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "brand subscribe"
+      "message message";
+
+    &__message {
+      align-items: flex-start;
+    }
+
+    &__message-text {
+      font-size: 40px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .footer {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "brand"
+      "message"
+      "subscribe";
+    padding: var(--spacing-2xl) var(--spacing-md);
+
+    &__message {
+      align-items: flex-start;
+    }
+
+    &__message-text {
+      font-size: 32px;
+    }
   }
 }

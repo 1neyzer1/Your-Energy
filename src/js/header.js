@@ -1,20 +1,20 @@
-import { switchToHome, switchToFavorites } from './exercises.js';
-
 // Current active page
 let currentPage = 'home';
 
-// Mobile menu elements
 let mobileMenu = null;
 let burgerButton = null;
 let closeButton = null;
 
-// Switch page and update UI
-export function switchPage(page) {
-  if (currentPage === page) return;
+function getPageFromLocation() {
+  const bodyPage = document.body?.dataset.page;
+  if (bodyPage) return bodyPage;
 
-  currentPage = page;
+  const pathname = window.location.pathname;
+  if (pathname.endsWith('page-2.html')) return 'favorites';
+  return 'home';
+}
 
-  // Update nav links active state in desktop nav
+function setActiveLinks(page) {
   const navLinks = document.querySelectorAll('.header__nav-link');
   navLinks.forEach(link => {
     const linkPage = link.getAttribute('data-page');
@@ -25,7 +25,6 @@ export function switchPage(page) {
     }
   });
 
-  // Update nav links active state in mobile menu
   const mobileNavLinks = document.querySelectorAll('.mobile-menu__nav-link');
   mobileNavLinks.forEach(link => {
     const linkPage = link.getAttribute('data-page');
@@ -35,16 +34,8 @@ export function switchPage(page) {
       link.classList.remove('mobile-menu__nav-link--active');
     }
   });
-
-  // Call corresponding function to render content
-  if (page === 'home') {
-    switchToHome();
-  } else if (page === 'favorites') {
-    switchToFavorites();
-  }
 }
 
-// Open mobile menu
 function openMobileMenu() {
   if (mobileMenu) {
     mobileMenu.classList.add('is-open');
@@ -52,7 +43,6 @@ function openMobileMenu() {
   }
 }
 
-// Close mobile menu
 function closeMobileMenu() {
   if (mobileMenu) {
     mobileMenu.classList.remove('is-open');
@@ -60,50 +50,29 @@ function closeMobileMenu() {
   }
 }
 
-// Initialize header event listeners
 export function initHeader() {
-  // Desktop nav links
-  const navLinks = document.querySelectorAll('.header__nav-link');
+  currentPage = getPageFromLocation();
+  setActiveLinks(currentPage);
 
-  navLinks.forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const page = link.getAttribute('data-page');
-      if (page) {
-        switchPage(page);
-      }
-    });
-  });
-
-  // Mobile menu elements
   mobileMenu = document.querySelector('.mobile-menu');
   burgerButton = document.querySelector('.header__burger');
   closeButton = document.querySelector('.mobile-menu__close');
 
-  // Burger button
   if (burgerButton) {
     burgerButton.addEventListener('click', openMobileMenu);
   }
 
-  // Close button
   if (closeButton) {
     closeButton.addEventListener('click', closeMobileMenu);
   }
 
-  // Mobile nav links
   const mobileNavLinks = document.querySelectorAll('.mobile-menu__nav-link');
   mobileNavLinks.forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const page = link.getAttribute('data-page');
-      if (page) {
-        switchPage(page);
-        closeMobileMenu();
-      }
+    link.addEventListener('click', () => {
+      closeMobileMenu();
     });
   });
 
-  // Close menu on backdrop click
   if (mobileMenu) {
     mobileMenu.addEventListener('click', e => {
       if (e.target === mobileMenu) {
@@ -113,8 +82,6 @@ export function initHeader() {
   }
 }
 
-// Get current page
 export function getCurrentPage() {
   return currentPage;
 }
-

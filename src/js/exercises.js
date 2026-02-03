@@ -1,5 +1,5 @@
 import { openExerciseModal } from './exercise-modal.js';
-import { getFavorites } from './favorites.js';
+import { getFavorites, removeFromFavorites } from './favorites.js';
 
 // Глобальні змінні для фільтра та сторінки
 let currentFilter = 'Muscles';
@@ -7,6 +7,8 @@ let currentPage = 1;
 let currentCategory = null;
 let currentSearchKeyword = '';
 let currentMode = 'home'; // 'home' або 'favorites'
+const FILTERS_LIMIT = 12;
+const EXERCISES_LIMIT = 10;
 
 // Функція для показу поля пошуку
 function showSearchField() {
@@ -44,6 +46,22 @@ export function initCardsEventListener() {
     // Знаходимо найближчу картку від місця кліку
     const card = event.target.closest('.exercises__content__main__cards-item');
 
+    const removeButton = event.target.closest(
+      '[data-action="remove-favorite"]'
+    );
+    if (removeButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (currentMode === 'favorites' && card) {
+        const exerciseId = card.getAttribute('data-exercise-id');
+        if (exerciseId) {
+          removeFromFavorites(exerciseId);
+          loadFavoritesExercises();
+        }
+      }
+      return;
+    }
+
     if (!card) {
       return;
     }
@@ -69,7 +87,7 @@ function createExerciseCard(exercise) {
   return `
     <div class="exercises__content__main__cards-item" data-category-name="${exercise.name}">
       <div class="exercises__content__main__cards-item-image">
-        <img src="${exercise.imgURL}" alt="${exercise.name} exercise" />
+        <img src="${exercise.imgURL}" alt="${exercise.name} exercise" loading="lazy" decoding="async" />
         <div class="exercises__content__main__cards-item-overlay">
           <div class="exercises__content__main__cards-item-overlay-name">${exercise.name}</div>
           <div class="exercises__content__main__cards-item-overlay-category">${exercise.filter}</div>
@@ -87,6 +105,21 @@ function createExerciseItemCard(exercise) {
   const bodyPart = exercise.bodyPart || '';
   const target = exercise.target || '';
   const exerciseId = exercise._id || '';
+
+  const removeButtonHTML =
+    currentMode === 'favorites'
+      ? `
+    <button class="exercises__content__main__cards-item-remove" type="button" data-action="remove-favorite" aria-label="Remove from favorites">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M8 6V4H16V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M19 6L18 20H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 10V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M14 10V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  `
+      : '';
 
   return `
     <div class="exercises__content__main__cards-item exercises__content__main__cards-item--exercise" data-exercise-id="${exerciseId}">
@@ -134,6 +167,7 @@ function createExerciseItemCard(exercise) {
           <span class="exercises__content__main__cards-item-info-value">${target}</span>
         </div>
       </div>
+      ${removeButtonHTML}
     </div>
   `;
 }
@@ -205,6 +239,30 @@ function renderEmptyState() {
     <div class="exercises__content__main__empty-state">
       <p class="exercises__content__main__empty-state-text">
         Unfortunately, no results were found. You may want to consider other search options.
+      </p>
+    </div>
+  `;
+
+  cardsContainer.insertAdjacentHTML('beforeend', emptyStateHTML);
+}
+
+// Функція для відображення empty state для категорій
+function renderCategoriesEmptyState() {
+  const cardsContainer = document.querySelector(
+    '.exercises__content__main__cards'
+  );
+
+  if (!cardsContainer) {
+    return;
+  }
+
+  cardsContainer.classList.remove('exercises__content__main__cards--exercises');
+  cardsContainer.innerHTML = '';
+
+  const emptyStateHTML = `
+    <div class="exercises__content__main__empty-state">
+      <p class="exercises__content__main__empty-state-text">
+        Unfortunately, no categories were found for this filter.
       </p>
     </div>
   `;
@@ -380,7 +438,7 @@ export function loadExerciseCards(filter, page = 1) {
 
   // Кодуємо параметри для безпечного передавання в URL
   const encodedFilter = encodeURIComponent(filter);
-  const url = `https://your-energy.b.goit.study/api/filters?filter=${encodedFilter}&page=${page}`;
+  const url = `https://your-energy.b.goit.study/api/filters?filter=${encodedFilter}&page=${page}&limit=${FILTERS_LIMIT}`;
 
   fetch(url)
     .then(response => response.json())
@@ -392,16 +450,23 @@ export function loadExerciseCards(filter, page = 1) {
       const totalPages =
         data.totalPages || data.total_pages || data.pageCount || 1;
 
+      currentCategory = null; // Скидаємо поточну категорію
+
       if (Array.isArray(exercises) && exercises.length > 0) {
-        currentCategory = null; // Скидаємо поточну категорію
         updateBreadcrumbs(null);
         renderExerciseCards(exercises);
         renderPagination(totalPages, page);
       } else {
         updateBreadcrumbs(null);
+        renderCategoriesEmptyState();
         renderPagination(1, 1);
       }
     })
+    .catch(() => {
+      updateBreadcrumbs(null);
+      renderCategoriesEmptyState();
+      renderPagination(1, 1);
+    });
 }
 
 // Функція для завантаження вправ за категорією
@@ -422,14 +487,14 @@ export function loadExercisesByCategory(
   if (currentFilter === 'Muscles') {
     paramName = 'muscles';
   } else if (currentFilter === 'Body parts') {
-    paramName = 'bodyPart';
+    paramName = 'bodypart';
   } else if (currentFilter === 'Equipment') {
     paramName = 'equipment';
   }
 
   // Кодуємо параметри для безпечного передавання в URL
   const encodedCategory = encodeURIComponent(categoryName);
-  let url = `https://your-energy.b.goit.study/api/exercises?${paramName}=${encodedCategory}&page=${page}&limit=10`;
+  let url = `https://your-energy.b.goit.study/api/exercises?${paramName}=${encodedCategory}&page=${page}&limit=${EXERCISES_LIMIT}`;
 
   // Додаємо параметр пошуку якщо він є
   if (keyword && keyword.trim() !== '') {
@@ -463,32 +528,32 @@ export function loadExercisesByCategory(
         }
       }
     })
+    .catch(() => {
+      renderEmptyState();
+      const paginationContainer = document.querySelector(
+        '.exercises__content__pagination'
+      );
+      if (paginationContainer) {
+        paginationContainer.innerHTML = '';
+      }
+    });
 }
 
 // Функція для ініціалізації обробників пошуку
 export function initSearch() {
+  const searchForm = document.getElementById('js-exercises-search');
   const searchInput = document.getElementById('js-exercises-search-input');
 
-  if (!searchInput) {
+  if (!searchForm || !searchInput) {
     return;
   }
 
-  let searchTimeout = null;
-
-  // Обробка введення тексту з затримкою 1 секунда
-  searchInput.addEventListener('input', () => {
-    // Очищаємо попередній таймер
-    if (searchTimeout) {
-      clearTimeout(searchTimeout);
+  searchForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const keyword = searchInput.value.trim();
+    if (currentCategory) {
+      loadExercisesByCategory(currentCategory, 1, keyword);
     }
-
-    // Встановлюємо новий таймер
-    searchTimeout = setTimeout(() => {
-      const keyword = searchInput.value.trim();
-      if (currentCategory) {
-        loadExercisesByCategory(currentCategory, 1, keyword);
-      }
-    }, 1000);
   });
 }
 
