@@ -3,7 +3,7 @@
     <div class="home__text">
       <h1 class="home__title">
         <span class="home__title-decor">
-          <img src="./images/svg/sun.svg" alt="Sun" loading="lazy" decoding="async">
+          <img src="./images/svg/sun.svg" alt="Sun" width="60" height="60" loading="lazy" decoding="async">
         </span>
         Get <span class="home__title-italic">Body</span> in shape, Stay healthy
       </h1>
@@ -14,14 +14,20 @@
     </div>
     <div class="home__sidebar">
       <div class="home__image-small">
-        <img
-          src="./images/home-thumb-168.jpg"
-          srcset="./images/home-thumb-168.jpg 1x, ./images/home-thumb-336.jpg 2x"
-          width="168"
-          height="100"
-          alt="Women exercising outdoors"
-          decoding="async"
-        >
+        <picture>
+          <source
+            type="image/webp"
+            srcset="./images/webp/home-thumb-168.webp 1x, ./images/webp/home-thumb-336.webp 2x"
+          >
+          <img
+            src="./images/home-thumb-168.jpg"
+            srcset="./images/home-thumb-168.jpg 1x, ./images/home-thumb-336.jpg 2x"
+            width="168"
+            height="100"
+            alt="Women exercising outdoors"
+            decoding="async"
+          >
+        </picture>
       </div>
       <div class="home__hashtags">
         <button class="home__hashtags-item" type="button">#Sport</button>
@@ -32,15 +38,22 @@
     </div>
   </div>
   <div class="home__hero">
-    <img
-      src="./images/home-hero-1200.jpg"
-      srcset="./images/home-hero-800.jpg 800w, ./images/home-hero-1200.jpg 1200w, ./images/home-hero-2400.jpg 2400w"
-      sizes="(max-width: 767px) 100vw, (max-width: 1279px) 90vw, 1200px"
-      width="1200"
-      height="400"
-      alt="Abductors exercise"
-      decoding="async"
-      fetchpriority="high"
-    >
+    <picture>
+      <source
+        type="image/webp"
+        srcset="./images/webp/home-hero-800.webp 800w, ./images/webp/home-hero-1200.webp 1200w, ./images/webp/home-hero-2400.webp 2400w"
+        sizes="(max-width: 767px) 100vw, (max-width: 1279px) 90vw, 1200px"
+      >
+      <img
+        src="./images/home-hero-1200.jpg"
+        srcset="./images/home-hero-800.jpg 800w, ./images/home-hero-1200.jpg 1200w, ./images/home-hero-2400.jpg 2400w"
+        sizes="(max-width: 767px) 100vw, (max-width: 1279px) 90vw, 1200px"
+        width="1200"
+        height="400"
+        alt="Abductors exercise"
+        decoding="async"
+        fetchpriority="high"
+      >
+    </picture>
   </div>
 </section>

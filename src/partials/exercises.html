@@ -43,11 +43,11 @@
   <div class="exercises__content__main">
     <div class="exercises__content__main__aside">
       <div class="exercises__content__main__aside__quote">
-        <img src="./images/svg/runner-icon-light.svg" alt="Quote" loading="lazy" decoding="async">
+        <img src="./images/svg/runner-icon-light.svg" alt="Quote" width="34" height="32" loading="lazy" decoding="async">
         <div class="exercises__content__main__aside__quote-content">
           <div class="exercises__content__main__aside__quote-title">
             <span class="exercises__content__main__aside__quote-title-text">Quote of the day</span>
-            <img src="./images/svg/quote-icon.svg" alt="Quote" loading="lazy" decoding="async">
+            <img src="./images/svg/quote-icon.svg" alt="Quote" width="19" height="16" loading="lazy" decoding="async">
           </div>
           <p class="exercises__content__main__aside__quote-text" id="js-exercises-quote-text"></p>
           <div class="exercises__content__main__aside__quote-author" id="js-exercises-quote-author"></div>
@@ -55,19 +55,25 @@
       </div>
 
       <div class="exercises__content__main__aside__info">
-        <img
-          src="./images/exercises-aside-480.jpg"
-          srcset="./images/exercises-aside-480.jpg 1x, ./images/exercises-aside-960.jpg 2x"
-          width="480"
-          height="320"
-          alt="Exercise image"
-          loading="lazy"
-          decoding="async"
-          class="exercises__content__main__aside__image"
-        >
+        <picture>
+          <source
+            type="image/webp"
+            srcset="./images/webp/exercises-aside-480.webp 1x, ./images/webp/exercises-aside-960.webp 2x"
+          >
+          <img
+            src="./images/exercises-aside-480.jpg"
+            srcset="./images/exercises-aside-480.jpg 1x, ./images/exercises-aside-960.jpg 2x"
+            width="480"
+            height="320"
+            alt="Exercise image"
+            loading="lazy"
+            decoding="async"
+            class="exercises__content__main__aside__image"
+          >
+        </picture>
 
         <div class="exercises__content__main__aside__norm">
-          <img src="./images/svg/norm-icon.svg" alt="Norm icon" loading="lazy" decoding="async">
+          <img src="./images/svg/norm-icon.svg" alt="Norm icon" width="34" height="32" loading="lazy" decoding="async">
           <div class="exercises__content__main__aside__norm-context">
             <span class="exercises__content__main__aside__norm-context-title">110 min</span><br>
             <span class="exercises__content__main__aside__norm-context-subtitle">Daily norm of sports</span>

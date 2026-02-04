@@ -19,9 +19,6 @@ import {
 import { initHeader } from './js/header.js';
 import { displayQuote } from './js/quote.js';
 
-// Load and display quote of the day
-displayQuote();
-
 // Функція для відправки запиту на оформлення підписки
 async function subscribeToNewsletter(email) {
   try {
@@ -53,6 +50,8 @@ async function subscribeToNewsletter(email) {
 
 // Початкове завантаження та ініціалізація
 document.addEventListener('DOMContentLoaded', () => {
+  // Load and display quote of the day
+  displayQuote();
   // Ініціалізація модалок
   initExerciseModal();
   initRatingModal();

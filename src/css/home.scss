@@ -44,6 +44,10 @@
 }
 
 .home__image-small {
+  picture {
+    display: block;
+  }
+
   img {
     width: 168px;
     height: 100px;
@@ -73,6 +77,10 @@
 
 .home__hero {
   margin-top: var(--spacing-xl);
+
+  picture {
+    display: block;
+  }
 
   img {
     width: 100%;

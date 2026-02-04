@@ -1,4 +1,4 @@
-<div class="rating-modal" id="js-rating-modal">
+<div class="rating-modal" id="js-rating-modal" role="dialog" aria-modal="true" aria-labelledby="js-rating-modal-title">
   <div class="rating-modal__overlay"></div>
   <div class="rating-modal__content">
     <button class="rating-modal__close" id="js-rating-modal-close" aria-label="Close modal">
@@ -9,7 +9,7 @@
     </button>
 
     <div class="rating-modal__body">
-      <h2 class="rating-modal__title">Rating</h2>
+      <h2 class="rating-modal__title" id="js-rating-modal-title">Rating</h2>
 
       <div class="rating-modal__server-message" id="js-rating-server-message">
         <span class="rating-modal__server-message-text" id="js-rating-server-message-text"></span>
@@ -69,7 +69,7 @@
 
         <div class="rating-modal__field">
           <input type="email" class="rating-modal__input" id="js-rating-modal-email" placeholder="Email"
-            aria-label="Email address" required>
+            aria-label="Email address" autocomplete="email" required>
           <div class="rating-modal__error" id="js-email-error"></div>
         </div>
 
