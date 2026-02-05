@@ -271,6 +271,13 @@ function renderCategoriesEmptyState() {
 }
 
 // Функція для оновлення breadcrumbs
+function formatCategoryLabel(label) {
+  if (!label) return '';
+  const trimmed = label.trim();
+  if (!trimmed) return label;
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+}
+
 export function updateBreadcrumbs(categoryName = null) {
   const breadcrumbsContainer = document.getElementById(
     'js-exercises-breadcrumbs'
@@ -284,20 +291,21 @@ export function updateBreadcrumbs(categoryName = null) {
 
   // Якщо режим Favorites - показуємо тільки заголовок "Favorites"
   if (currentMode === 'favorites') {
-    const favoritesTitle = document.createElement('button');
+    const favoritesTitle = document.createElement('span');
     favoritesTitle.className =
-      'exercises__content__header-breadcrumbs-item exercises__content__header-breadcrumbs-item--active';
+      'exercises__content__header-title exercises__content__header-breadcrumbs-current';
     favoritesTitle.textContent = 'Favorites';
-    favoritesTitle.setAttribute('data-breadcrumb', 'favorites');
     breadcrumbsContainer.appendChild(favoritesTitle);
     return;
   }
 
   // Завжди додаємо "Exercises"
   const exercisesBtn = document.createElement('button');
-  exercisesBtn.className = 'exercises__content__header-breadcrumbs-item';
+  exercisesBtn.className =
+    'exercises__content__header-title exercises__content__header-breadcrumbs-item';
   exercisesBtn.textContent = 'Exercises';
   exercisesBtn.setAttribute('data-breadcrumb', 'exercises');
+  exercisesBtn.type = 'button';
 
   if (!categoryName) {
     exercisesBtn.classList.add(
@@ -320,11 +328,10 @@ export function updateBreadcrumbs(categoryName = null) {
     separator.textContent = '/';
     breadcrumbsContainer.appendChild(separator);
 
-    const categoryBtn = document.createElement('button');
-    categoryBtn.className =
-      'exercises__content__header-breadcrumbs-item exercises__content__header-breadcrumbs-item--active';
-    categoryBtn.textContent = categoryName;
-    breadcrumbsContainer.appendChild(categoryBtn);
+    const categoryLabel = document.createElement('span');
+    categoryLabel.className = 'exercises__content__header-breadcrumbs-current';
+    categoryLabel.textContent = formatCategoryLabel(categoryName);
+    breadcrumbsContainer.appendChild(categoryLabel);
   }
 }
 
