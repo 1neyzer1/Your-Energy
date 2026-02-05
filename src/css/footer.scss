@@ -29,31 +29,28 @@
 
   &__socials {
     display: flex;
-    gap: var(--spacing-sm);
+    gap: 12px;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
+  /* Footer social (dark background) */
   &__socials-link {
-    display: flex;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    background-color: rgba(36, 36, 36, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
+    color: #f4f4f4;
+    background: transparent;
+    border: none;
+    padding: 0;
 
-    &:hover {
-      background-color: rgba(36, 36, 36, 0.8);
-    }
-
-    img {
+    svg {
+      width: 44px;
+      height: 44px;
       display: block;
-      width: 20px;
-      height: 20px;
     }
   }
 
