@@ -11,8 +11,8 @@
   <link rel="dns-prefetch" href="https://your-energy.b.goit.study">
   <link rel="dns-prefetch" href="https://ftp.goit.study">
   <link rel="icon" href="/Your-Energy/favicon.svg" type="image/svg+xml">
-  <script type="module" crossorigin src="/Your-Energy/assets/main-0_UwR_K_.js"></script>
-  <link rel="stylesheet" crossorigin href="/Your-Energy/assets/main-pG5DppRu.css">
+  <script type="module" crossorigin src="/Your-Energy/assets/main-BUFZkZYL.js"></script>
+  <link rel="stylesheet" crossorigin href="/Your-Energy/assets/main-Wy8-LQAD.css">
 </head>
 
 <body data-page="favorites">
@@ -121,37 +121,45 @@
           class="exercises__content__header-title exercises__content__header-breadcrumbs-item exercises__content__header-breadcrumbs-item--active"
           data-breadcrumb="exercises">Exercises</button>
       </div>
-    </div>
-    <div class="exercises__content__header-filters">
-      <form class="exercises__content__header-search" id="js-exercises-search" style="display: none;">
-        <input type="search" class="exercises__content__header-search-input" id="js-exercises-search-input"
-          placeholder="Search..." aria-label="Search exercises">
-        <button class="exercises__content__header-search-submit" type="submit" aria-label="Search">
-          <svg class="exercises__content__header-search-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M8.25 14.25C11.5637 14.25 14.25 11.5637 14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25Z"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path d="M15.75 15.75L12.4875 12.4875" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round"></path>
-          </svg>
-        </button>
-      </form>
-      <button
-        class="exercises__content__header-filters-item exercises__content__header-filters-item--active"
-        data-filter="Muscles"
-        type="button"
-        aria-pressed="true">Muscles</button>
-      <button
-        class="exercises__content__header-filters-item"
-        data-filter="Body parts"
-        type="button"
-        aria-pressed="false">Body parts</button>
-      <button
-        class="exercises__content__header-filters-item"
-        data-filter="Equipment"
-        type="button"
-        aria-pressed="false">Equipment</button>
+      <div class="exercises__content__header-controls">
+        <form class="exercises__content__header-search" id="js-exercises-search" style="display: none;">
+          <input type="search" class="exercises__content__header-search-input" id="js-exercises-search-input"
+            placeholder="Search..." aria-label="Search exercises">
+          <button class="exercises__content__header-search-submit" type="submit" aria-label="Search">
+            <svg class="exercises__content__header-search-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M8.25 14.25C11.5637 14.25 14.25 11.5637 14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25Z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M15.75 15.75L12.4875 12.4875" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </button>
+        </form>
+        <ul class="exercises__content__header-filters" aria-label="Exercise filters">
+          <li class="exercises__content__header-filters-option">
+            <button
+              class="exercises__content__header-filters-item exercises__content__header-filters-item--active"
+              data-filter="Muscles"
+              type="button"
+              aria-pressed="true">Muscles</button>
+          </li>
+          <li class="exercises__content__header-filters-option">
+            <button
+              class="exercises__content__header-filters-item"
+              data-filter="Body parts"
+              type="button"
+              aria-pressed="false">Body parts</button>
+          </li>
+          <li class="exercises__content__header-filters-option">
+            <button
+              class="exercises__content__header-filters-item"
+              data-filter="Equipment"
+              type="button"
+              aria-pressed="false">Equipment</button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
