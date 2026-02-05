@@ -10,7 +10,7 @@ function getPageFromLocation() {
   if (bodyPage) return bodyPage;
 
   const pathname = window.location.pathname;
-  if (pathname.endsWith('page-2.html')) return 'favorites';
+  if (pathname.endsWith('favorites.html')) return 'favorites';
   return 'home';
 }
 
