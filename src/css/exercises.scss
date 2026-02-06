@@ -38,6 +38,12 @@
       padding: 0;
       list-style: none;
 
+      &-entry {
+        display: flex;
+        margin: 0;
+        padding: 0;
+      }
+
       &-item {
         font-family: var(--font-family);
         font-size: 16px;
@@ -108,6 +114,10 @@
       align-items: center;
       position: relative;
       width: auto;
+
+      &--hidden {
+        display: none;
+      }
 
       &-input {
         font-family: var(--font-family);

@@ -20,8 +20,10 @@ function setActiveLinks(page) {
     const linkPage = link.getAttribute('data-page');
     if (linkPage === page) {
       link.classList.add('header__nav-link--active');
+      link.setAttribute('aria-current', 'page');
     } else {
       link.classList.remove('header__nav-link--active');
+      link.removeAttribute('aria-current');
     }
   });
 
@@ -30,8 +32,10 @@ function setActiveLinks(page) {
     const linkPage = link.getAttribute('data-page');
     if (linkPage === page) {
       link.classList.add('mobile-menu__nav-link--active');
+      link.setAttribute('aria-current', 'page');
     } else {
       link.classList.remove('mobile-menu__nav-link--active');
+      link.removeAttribute('aria-current');
     }
   });
 }

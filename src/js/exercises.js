@@ -14,7 +14,9 @@ const EXERCISES_LIMIT = 10;
 function showSearchField() {
   const searchField = document.getElementById('js-exercises-search');
   if (searchField) {
-    searchField.style.display = 'flex';
+    searchField.classList.remove(
+      'exercises__content__header-search--hidden'
+    );
   }
 }
 
@@ -23,7 +25,7 @@ function hideSearchField() {
   const searchField = document.getElementById('js-exercises-search');
   const searchInput = document.getElementById('js-exercises-search-input');
   if (searchField) {
-    searchField.style.display = 'none';
+    searchField.classList.add('exercises__content__header-search--hidden');
   }
   if (searchInput) {
     searchInput.value = '';
@@ -278,6 +280,13 @@ function formatCategoryLabel(label) {
   return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
 }
 
+function createBreadcrumbEntry(node) {
+  const entry = document.createElement('li');
+  entry.className = 'exercises__content__header-breadcrumbs-entry';
+  entry.appendChild(node);
+  return entry;
+}
+
 export function updateBreadcrumbs(categoryName = null) {
   const breadcrumbsContainer = document.getElementById(
     'js-exercises-breadcrumbs'
@@ -295,44 +304,45 @@ export function updateBreadcrumbs(categoryName = null) {
     favoritesTitle.className =
       'exercises__content__header-title exercises__content__header-breadcrumbs-current';
     favoritesTitle.textContent = 'Favorites';
-    breadcrumbsContainer.appendChild(favoritesTitle);
+    favoritesTitle.setAttribute('aria-current', 'page');
+    breadcrumbsContainer.appendChild(createBreadcrumbEntry(favoritesTitle));
     return;
   }
 
-  // Завжди додаємо "Exercises"
+  if (!categoryName) {
+    const exercisesTitle = document.createElement('span');
+    exercisesTitle.className =
+      'exercises__content__header-title exercises__content__header-breadcrumbs-current';
+    exercisesTitle.textContent = 'Exercises';
+    exercisesTitle.setAttribute('aria-current', 'page');
+    breadcrumbsContainer.appendChild(createBreadcrumbEntry(exercisesTitle));
+    return;
+  }
+
   const exercisesBtn = document.createElement('button');
   exercisesBtn.className =
     'exercises__content__header-title exercises__content__header-breadcrumbs-item';
   exercisesBtn.textContent = 'Exercises';
   exercisesBtn.setAttribute('data-breadcrumb', 'exercises');
   exercisesBtn.type = 'button';
-
-  if (!categoryName) {
-    exercisesBtn.classList.add(
-      'exercises__content__header-breadcrumbs-item--active'
-    );
-  }
-
   exercisesBtn.addEventListener('click', () => {
     currentCategory = null;
     currentPage = 1;
     loadExerciseCards(currentFilter, currentPage);
   });
+  breadcrumbsContainer.appendChild(createBreadcrumbEntry(exercisesBtn));
 
-  breadcrumbsContainer.appendChild(exercisesBtn);
+  const separator = document.createElement('span');
+  separator.className = 'exercises__content__header-breadcrumbs-separator';
+  separator.textContent = '/';
+  separator.setAttribute('aria-hidden', 'true');
+  breadcrumbsContainer.appendChild(createBreadcrumbEntry(separator));
 
-  // Якщо є категорія, додаємо її
-  if (categoryName) {
-    const separator = document.createElement('span');
-    separator.className = 'exercises__content__header-breadcrumbs-separator';
-    separator.textContent = '/';
-    breadcrumbsContainer.appendChild(separator);
-
-    const categoryLabel = document.createElement('span');
-    categoryLabel.className = 'exercises__content__header-breadcrumbs-current';
-    categoryLabel.textContent = formatCategoryLabel(categoryName);
-    breadcrumbsContainer.appendChild(categoryLabel);
-  }
+  const categoryLabel = document.createElement('span');
+  categoryLabel.className = 'exercises__content__header-breadcrumbs-current';
+  categoryLabel.textContent = formatCategoryLabel(categoryName);
+  categoryLabel.setAttribute('aria-current', 'page');
+  breadcrumbsContainer.appendChild(createBreadcrumbEntry(categoryLabel));
 }
 
 // Функція для рендерингу пагінації
@@ -647,14 +657,6 @@ export function switchToHome() {
   currentCategory = null;
   currentSearchKeyword = '';
 
-  // Показуємо фільтри
-  const filtersContainer = document.querySelector(
-    '.exercises__content__header-filters'
-  );
-  if (filtersContainer) {
-    filtersContainer.style.display = 'flex';
-  }
-
   // Видаляємо клас favorites з контейнера
   const contentContainer = document.querySelector('.exercises__content');
   if (contentContainer) {
@@ -670,14 +672,6 @@ export function switchToFavorites() {
   currentMode = 'favorites';
   currentCategory = null;
   currentSearchKeyword = '';
-
-  // Приховуємо фільтри та пошук
-  const filtersContainer = document.querySelector(
-    '.exercises__content__header-filters'
-  );
-  if (filtersContainer) {
-    filtersContainer.style.display = 'none';
-  }
 
   hideSearchField();
 

@@ -1,13 +1,20 @@
-<div class="exercises__content">
-  <div class="exercises__content__header">
+<section class="exercises__content" aria-label="Exercises">
+  <header class="exercises__content__header">
     <div class="exercises__content__header-top">
-      <div class="exercises__content__header-breadcrumbs" id="js-exercises-breadcrumbs">
-        <button
-          class="exercises__content__header-title exercises__content__header-breadcrumbs-item exercises__content__header-breadcrumbs-item--active"
-          data-breadcrumb="exercises">Exercises</button>
-      </div>
+      <nav class="exercises__content__header-breadcrumbs-nav" aria-label="Breadcrumb">
+        <ol class="exercises__content__header-breadcrumbs" id="js-exercises-breadcrumbs">
+          <li class="exercises__content__header-breadcrumbs-entry">
+            <span
+              class="exercises__content__header-title exercises__content__header-breadcrumbs-current"
+              aria-current="page">Exercises</span>
+          </li>
+        </ol>
+      </nav>
       <div class="exercises__content__header-controls">
-        <form class="exercises__content__header-search" id="js-exercises-search" style="display: none;">
+        <form
+          class="exercises__content__header-search exercises__content__header-search--hidden"
+          id="js-exercises-search"
+          role="search">
           <input type="search" class="exercises__content__header-search-input" id="js-exercises-search-input"
             placeholder="Search..." aria-label="Search exercises">
           <button class="exercises__content__header-search-submit" type="submit" aria-label="Search">
@@ -46,10 +53,10 @@
         </ul>
       </div>
     </div>
-  </div>
+  </header>
 
   <div class="exercises__content__main">
-    <div class="exercises__content__main__aside">
+    <aside class="exercises__content__main__aside">
       <div class="exercises__content__main__aside__quote">
         <img src="./images/svg/runner-icon-light.svg" alt="Quote" width="34" height="32" loading="lazy" decoding="async">
         <div class="exercises__content__main__aside__quote-content">
@@ -97,11 +104,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </aside>
 
     <div class="exercises__content__main__cards-container">
       <div class="exercises__content__main__cards"></div>
       <div class="exercises__content__pagination"></div>
     </div>
   </div>
-</div>
+</section>
