@@ -11,8 +11,8 @@
   <link rel="dns-prefetch" href="https://your-energy.b.goit.study">
   <link rel="dns-prefetch" href="https://ftp.goit.study">
   <link rel="icon" href="/Your-Energy/favicon.svg" type="image/svg+xml">
-  <script type="module" crossorigin src="/Your-Energy/assets/main-DncGGc4j.js"></script>
-  <link rel="stylesheet" crossorigin href="/Your-Energy/assets/main-CBarHkWE.css">
+  <script type="module" crossorigin src="/Your-Energy/assets/main-BFbGlFjz.js"></script>
+  <link rel="stylesheet" crossorigin href="/Your-Energy/assets/main-CUN-wIcb.css">
 </head>
 
 <body data-page="favorites">
@@ -67,7 +67,7 @@
 <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
   <div class="mobile-menu__content">
     <button class="mobile-menu__close" aria-label="Close menu">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
         <path d="M21 7L7 21M7 7L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round" />
       </svg>
@@ -112,8 +112,10 @@
 </div>
 
   <main>
+    <h1 class="visually-hidden">Favorites</h1>
     <!-- Favorites Section -->
-    <section class="exercises__content" aria-label="Exercises">
+    <section class="exercises__content" aria-labelledby="js-exercises-heading">
+  <h2 class="visually-hidden" id="js-exercises-heading">Exercises</h2>
   <header class="exercises__content__header">
     <div class="exercises__content__header-top">
       <nav class="exercises__content__header-breadcrumbs-nav" aria-label="Breadcrumb">
@@ -134,7 +136,7 @@
             placeholder="Search..." aria-label="Search exercises">
           <button class="exercises__content__header-search-submit" type="submit" aria-label="Search">
             <svg class="exercises__content__header-search-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
+              xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path
                 d="M8.25 14.25C11.5637 14.25 14.25 11.5637 14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25Z"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -173,14 +175,14 @@
   <div class="exercises__content__main">
     <aside class="exercises__content__main__aside">
       <div class="exercises__content__main__aside__quote">
-        <img src="data:image/svg+xml,%3csvg%20width='34'%20height='32'%20viewBox='0%200%2034%2032'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3ccircle%20cx='16'%20cy='16'%20r='16'%20fill='%23F4F4F4'%20fill-opacity='0.2'/%3e%3cpath%20d='M24.7293%2011.907C24.4611%2011.594%2023.9834%2011.5528%2023.6631%2011.8138L21.5637%2013.5369L20.5983%2011.1998C20.564%2011.1121%2020.5119%2011.0384%2020.452%2010.9734C20.2547%2010.5446%2019.9122%2010.1763%2019.44%209.96297C19.235%209.872%2019.0233%209.82326%2018.8116%209.79944C18.765%209.77561%2018.7229%209.7442%2018.6697%209.72796L14.9754%208.72184C14.7681%208.6666%2014.5597%208.70234%2014.3891%208.79981C14.1862%208.86696%2014.0122%209.011%2013.9291%209.22002L12.538%2012.7149C12.3873%2013.0951%2012.5801%2013.5239%2012.9703%2013.6734C13.3582%2013.8207%2013.7983%2013.6311%2013.9501%2013.2499L15.125%2010.2987L16.8076%2010.7557C16.7666%2010.8207%2016.7222%2010.8814%2016.689%2010.9507L14.532%2015.5188C14.501%2015.586%2014.4844%2015.6542%2014.4622%2015.7235L11.8408%2020.0177L7.45378%2021.4516C6.95721%2021.8144%206.85192%2022.4978%207.2188%2022.983C7.5879%2023.4692%208.28951%2023.5721%208.78497%2023.2137L13.274%2021.7029C13.4114%2021.6054%2013.5112%2021.4776%2013.5866%2021.34C13.6431%2021.2816%2013.7074%2021.235%2013.7506%2021.1624L15.3135%2018.6022L18.0878%2020.9123L15.1195%2024.1808C14.7105%2024.6313%2014.7515%2025.3255%2015.2148%2025.7241C15.677%2026.1259%2016.3853%2026.0836%2016.7965%2025.6309L20.5008%2021.5534C20.6161%2021.4278%2020.6848%2021.2826%2020.7313%2021.131C20.759%2021.0487%2020.759%2020.9632%2020.7657%2020.8776C20.7657%2020.8343%2020.7823%2020.7953%2020.779%2020.7552C20.769%2020.4563%2020.6449%2020.1661%2020.3944%2019.9592L17.8417%2017.8322C18.0257%2017.661%2018.182%2017.4574%2018.2951%2017.2181L19.9488%2013.7189L20.4786%2015.0975C20.5008%2015.2199%2020.5429%2015.3401%2020.6316%2015.4409C20.7114%2015.534%2020.8134%2015.5957%2020.922%2015.6391C20.9331%2015.6445%2020.9464%2015.6456%2020.9597%2015.6488C21.0284%2015.6726%2021.0982%2015.6954%2021.1703%2015.6986C21.2556%2015.7062%2021.3421%2015.6954%2021.4296%2015.6715C21.4318%2015.6705%2021.4329%2015.6705%2021.4329%2015.6705C21.4562%2015.665%2021.4795%2015.6694%2021.5028%2015.6596C21.6258%2015.6141%2021.72%2015.5372%2021.8009%2015.4474L24.8136%2012.9488C25.1339%2012.6857%2024.9987%2012.22%2024.7293%2011.907Z'%20fill='%23F4F4F4'/%3e%3cpath%20d='M20.9191%2010.1263C22.0853%2010.1263%2023.0306%209.20259%2023.0306%208.06314C23.0306%206.9237%2022.0853%206%2020.9191%206C19.753%206%2018.8076%206.9237%2018.8076%208.06314C18.8076%209.20259%2019.753%2010.1263%2020.9191%2010.1263Z'%20fill='%23F4F4F4'/%3e%3c/svg%3e" alt="Quote" width="34" height="32" loading="lazy" decoding="async">
+        <img src="data:image/svg+xml,%3csvg%20width='34'%20height='32'%20viewBox='0%200%2034%2032'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3ccircle%20cx='16'%20cy='16'%20r='16'%20fill='%23F4F4F4'%20fill-opacity='0.2'/%3e%3cpath%20d='M24.7293%2011.907C24.4611%2011.594%2023.9834%2011.5528%2023.6631%2011.8138L21.5637%2013.5369L20.5983%2011.1998C20.564%2011.1121%2020.5119%2011.0384%2020.452%2010.9734C20.2547%2010.5446%2019.9122%2010.1763%2019.44%209.96297C19.235%209.872%2019.0233%209.82326%2018.8116%209.79944C18.765%209.77561%2018.7229%209.7442%2018.6697%209.72796L14.9754%208.72184C14.7681%208.6666%2014.5597%208.70234%2014.3891%208.79981C14.1862%208.86696%2014.0122%209.011%2013.9291%209.22002L12.538%2012.7149C12.3873%2013.0951%2012.5801%2013.5239%2012.9703%2013.6734C13.3582%2013.8207%2013.7983%2013.6311%2013.9501%2013.2499L15.125%2010.2987L16.8076%2010.7557C16.7666%2010.8207%2016.7222%2010.8814%2016.689%2010.9507L14.532%2015.5188C14.501%2015.586%2014.4844%2015.6542%2014.4622%2015.7235L11.8408%2020.0177L7.45378%2021.4516C6.95721%2021.8144%206.85192%2022.4978%207.2188%2022.983C7.5879%2023.4692%208.28951%2023.5721%208.78497%2023.2137L13.274%2021.7029C13.4114%2021.6054%2013.5112%2021.4776%2013.5866%2021.34C13.6431%2021.2816%2013.7074%2021.235%2013.7506%2021.1624L15.3135%2018.6022L18.0878%2020.9123L15.1195%2024.1808C14.7105%2024.6313%2014.7515%2025.3255%2015.2148%2025.7241C15.677%2026.1259%2016.3853%2026.0836%2016.7965%2025.6309L20.5008%2021.5534C20.6161%2021.4278%2020.6848%2021.2826%2020.7313%2021.131C20.759%2021.0487%2020.759%2020.9632%2020.7657%2020.8776C20.7657%2020.8343%2020.7823%2020.7953%2020.779%2020.7552C20.769%2020.4563%2020.6449%2020.1661%2020.3944%2019.9592L17.8417%2017.8322C18.0257%2017.661%2018.182%2017.4574%2018.2951%2017.2181L19.9488%2013.7189L20.4786%2015.0975C20.5008%2015.2199%2020.5429%2015.3401%2020.6316%2015.4409C20.7114%2015.534%2020.8134%2015.5957%2020.922%2015.6391C20.9331%2015.6445%2020.9464%2015.6456%2020.9597%2015.6488C21.0284%2015.6726%2021.0982%2015.6954%2021.1703%2015.6986C21.2556%2015.7062%2021.3421%2015.6954%2021.4296%2015.6715C21.4318%2015.6705%2021.4329%2015.6705%2021.4329%2015.6705C21.4562%2015.665%2021.4795%2015.6694%2021.5028%2015.6596C21.6258%2015.6141%2021.72%2015.5372%2021.8009%2015.4474L24.8136%2012.9488C25.1339%2012.6857%2024.9987%2012.22%2024.7293%2011.907Z'%20fill='%23F4F4F4'/%3e%3cpath%20d='M20.9191%2010.1263C22.0853%2010.1263%2023.0306%209.20259%2023.0306%208.06314C23.0306%206.9237%2022.0853%206%2020.9191%206C19.753%206%2018.8076%206.9237%2018.8076%208.06314C18.8076%209.20259%2019.753%2010.1263%2020.9191%2010.1263Z'%20fill='%23F4F4F4'/%3e%3c/svg%3e" alt="" width="34" height="32" loading="lazy" decoding="async" aria-hidden="true">
         <div class="exercises__content__main__aside__quote-content">
           <div class="exercises__content__main__aside__quote-title">
             <span class="exercises__content__main__aside__quote-title-text">Quote of the day</span>
-            <img src="data:image/svg+xml,%3csvg%20width='19'%20height='16'%20viewBox='0%200%2019%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M3.75038%208.30157C4.90975%207.84218%205.83944%207.9625%206.53944%208.6625C7.23945%209.36251%207.44725%2010.4781%207.16287%2012.0094C6.94413%2013.1469%206.46288%2014.0219%205.71912%2014.6344C4.99725%2015.225%204.15507%2015.5203%203.19257%2015.5203C1.88006%2015.5203%200.972261%2015.0172%200.469125%2014.0109C-0.0339939%2012.9828%20-0.132432%2011.6047%200.173817%209.87657C0.348813%208.93594%200.633189%207.98438%201.02693%207.02186C1.4207%206.05937%201.9457%205.07501%202.60193%204.06876C3.25819%203.06251%204.11132%202.18749%205.16132%201.44376C6.21132%200.699998%207.37069%200.21875%208.63945%200L8.31132%203.47812C7.23945%203.69688%206.28788%204.25469%205.45664%205.15157C4.62537%206.02656%204.05662%207.07656%203.75038%208.30157ZM13.6269%208.30157C14.7863%207.84218%2015.716%207.9625%2016.416%208.6625C17.116%209.36251%2017.3238%2010.4781%2017.0394%2012.0094C16.8207%2013.1469%2016.3394%2014.0219%2015.5957%2014.6344C14.8738%2015.225%2014.0316%2015.5203%2013.0691%2015.5203C11.7566%2015.5203%2010.8488%2015.0172%2010.3457%2014.0109C9.84256%2012.9828%209.74414%2011.6047%2010.0504%209.87657C10.2254%208.93594%2010.5098%207.98438%2010.9035%207.02186C11.2973%206.05937%2011.8223%205.07501%2012.4785%204.06876C13.1348%203.06251%2013.9879%202.18749%2015.0379%201.44376C16.0879%200.699998%2017.2473%200.21875%2018.516%200L18.1879%203.47812C17.116%203.69688%2016.1645%204.25469%2015.3332%205.15157C14.5019%206.02656%2013.9332%207.07656%2013.6269%208.30157Z'%20fill='%23F4F4F4'/%3e%3c/svg%3e" alt="Quote" width="19" height="16" loading="lazy" decoding="async">
+            <img src="data:image/svg+xml,%3csvg%20width='19'%20height='16'%20viewBox='0%200%2019%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M3.75038%208.30157C4.90975%207.84218%205.83944%207.9625%206.53944%208.6625C7.23945%209.36251%207.44725%2010.4781%207.16287%2012.0094C6.94413%2013.1469%206.46288%2014.0219%205.71912%2014.6344C4.99725%2015.225%204.15507%2015.5203%203.19257%2015.5203C1.88006%2015.5203%200.972261%2015.0172%200.469125%2014.0109C-0.0339939%2012.9828%20-0.132432%2011.6047%200.173817%209.87657C0.348813%208.93594%200.633189%207.98438%201.02693%207.02186C1.4207%206.05937%201.9457%205.07501%202.60193%204.06876C3.25819%203.06251%204.11132%202.18749%205.16132%201.44376C6.21132%200.699998%207.37069%200.21875%208.63945%200L8.31132%203.47812C7.23945%203.69688%206.28788%204.25469%205.45664%205.15157C4.62537%206.02656%204.05662%207.07656%203.75038%208.30157ZM13.6269%208.30157C14.7863%207.84218%2015.716%207.9625%2016.416%208.6625C17.116%209.36251%2017.3238%2010.4781%2017.0394%2012.0094C16.8207%2013.1469%2016.3394%2014.0219%2015.5957%2014.6344C14.8738%2015.225%2014.0316%2015.5203%2013.0691%2015.5203C11.7566%2015.5203%2010.8488%2015.0172%2010.3457%2014.0109C9.84256%2012.9828%209.74414%2011.6047%2010.0504%209.87657C10.2254%208.93594%2010.5098%207.98438%2010.9035%207.02186C11.2973%206.05937%2011.8223%205.07501%2012.4785%204.06876C13.1348%203.06251%2013.9879%202.18749%2015.0379%201.44376C16.0879%200.699998%2017.2473%200.21875%2018.516%200L18.1879%203.47812C17.116%203.69688%2016.1645%204.25469%2015.3332%205.15157C14.5019%206.02656%2013.9332%207.07656%2013.6269%208.30157Z'%20fill='%23F4F4F4'/%3e%3c/svg%3e" alt="" width="19" height="16" loading="lazy" decoding="async" aria-hidden="true">
           </div>
-          <p class="exercises__content__main__aside__quote-text" id="js-exercises-quote-text"></p>
-          <div class="exercises__content__main__aside__quote-author" id="js-exercises-quote-author"></div>
+          <p class="exercises__content__main__aside__quote-text" id="js-exercises-quote-text" aria-live="polite"></p>
+          <div class="exercises__content__main__aside__quote-author" id="js-exercises-quote-author" aria-live="polite"></div>
         </div>
       </div>
 
@@ -203,7 +205,7 @@
         </picture>
 
         <div class="exercises__content__main__aside__norm">
-          <img src="data:image/svg+xml,%3csvg%20width='34'%20height='32'%20viewBox='0%200%2034%2032'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3ccircle%20cx='16'%20cy='16'%20r='16'%20fill='%23242424'/%3e%3cpath%20d='M10.6%2011.7143H9.4C9.0675%2011.7143%208.8%2012.0009%208.8%2012.3571V15.1429H8.2C8.09%2015.1429%208%2015.2393%208%2015.3571V16.6429C8%2016.7607%208.09%2016.8571%208.2%2016.8571H8.8V19.6429C8.8%2019.9991%209.0675%2020.2857%209.4%2020.2857H10.6C10.9325%2020.2857%2011.2%2019.9991%2011.2%2019.6429V12.3571C11.2%2012.0009%2010.9325%2011.7143%2010.6%2011.7143ZM23.8%2015.1429H23.2V12.3571C23.2%2012.0009%2022.9325%2011.7143%2022.6%2011.7143H21.4C21.0675%2011.7143%2020.8%2012.0009%2020.8%2012.3571V19.6429C20.8%2019.9991%2021.0675%2020.2857%2021.4%2020.2857H22.6C22.9325%2020.2857%2023.2%2019.9991%2023.2%2019.6429V16.8571H23.8C23.91%2016.8571%2024%2016.7607%2024%2016.6429V15.3571C24%2015.2393%2023.91%2015.1429%2023.8%2015.1429ZM19.4%2010H18.2C17.8675%2010%2017.6%2010.2866%2017.6%2010.6429V15.1429H14.4V10.6429C14.4%2010.2866%2014.1325%2010%2013.8%2010H12.6C12.2675%2010%2012%2010.2866%2012%2010.6429V21.3571C12%2021.7134%2012.2675%2022%2012.6%2022H13.8C14.1325%2022%2014.4%2021.7134%2014.4%2021.3571V16.8571H17.6V21.3571C17.6%2021.7134%2017.8675%2022%2018.2%2022H19.4C19.7325%2022%2020%2021.7134%2020%2021.3571V10.6429C20%2010.2866%2019.7325%2010%2019.4%2010Z'%20fill='%23F4F4F4'/%3e%3c/svg%3e" alt="Norm icon" width="34" height="32" loading="lazy" decoding="async">
+          <img src="data:image/svg+xml,%3csvg%20width='34'%20height='32'%20viewBox='0%200%2034%2032'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3ccircle%20cx='16'%20cy='16'%20r='16'%20fill='%23242424'/%3e%3cpath%20d='M10.6%2011.7143H9.4C9.0675%2011.7143%208.8%2012.0009%208.8%2012.3571V15.1429H8.2C8.09%2015.1429%208%2015.2393%208%2015.3571V16.6429C8%2016.7607%208.09%2016.8571%208.2%2016.8571H8.8V19.6429C8.8%2019.9991%209.0675%2020.2857%209.4%2020.2857H10.6C10.9325%2020.2857%2011.2%2019.9991%2011.2%2019.6429V12.3571C11.2%2012.0009%2010.9325%2011.7143%2010.6%2011.7143ZM23.8%2015.1429H23.2V12.3571C23.2%2012.0009%2022.9325%2011.7143%2022.6%2011.7143H21.4C21.0675%2011.7143%2020.8%2012.0009%2020.8%2012.3571V19.6429C20.8%2019.9991%2021.0675%2020.2857%2021.4%2020.2857H22.6C22.9325%2020.2857%2023.2%2019.9991%2023.2%2019.6429V16.8571H23.8C23.91%2016.8571%2024%2016.7607%2024%2016.6429V15.3571C24%2015.2393%2023.91%2015.1429%2023.8%2015.1429ZM19.4%2010H18.2C17.8675%2010%2017.6%2010.2866%2017.6%2010.6429V15.1429H14.4V10.6429C14.4%2010.2866%2014.1325%2010%2013.8%2010H12.6C12.2675%2010%2012%2010.2866%2012%2010.6429V21.3571C12%2021.7134%2012.2675%2022%2012.6%2022H13.8C14.1325%2022%2014.4%2021.7134%2014.4%2021.3571V16.8571H17.6V21.3571C17.6%2021.7134%2017.8675%2022%2018.2%2022H19.4C19.7325%2022%2020%2021.7134%2020%2021.3571V10.6429C20%2010.2866%2019.7325%2010%2019.4%2010Z'%20fill='%23F4F4F4'/%3e%3c/svg%3e" alt="" width="34" height="32" loading="lazy" decoding="async" aria-hidden="true">
           <div class="exercises__content__main__aside__norm-context">
             <span class="exercises__content__main__aside__norm-context-title">110 min</span><br>
             <span class="exercises__content__main__aside__norm-context-subtitle">Daily norm of sports</span>
@@ -222,7 +224,12 @@
     </aside>
 
     <div class="exercises__content__main__cards-container">
-      <div class="exercises__content__main__cards"></div>
+      <ul
+        class="exercises__content__main__cards exercise-cards"
+        id="js-exercises-cards"
+        aria-live="polite"
+        aria-busy="false">
+      </ul>
       <div class="exercises__content__pagination"></div>
     </div>
   </div>
@@ -261,19 +268,24 @@
         </a>
       </li>
     </ul>
-    <span class="footer__copyright">Your Energy. All rights reserved.</span>
+    <p class="footer__copyright">Your Energy. All rights reserved.</p>
   </div>
   <div class="footer__message">
-    <div class="footer__message-text">Transforming your <span class="footer__message-text-italic">body</span> shape with
-      us</div>
-    <div class="footer__legal">
-      <a href="#" class="footer__legal-link">Privacy Policy</a>
-      <span> / </span>
-      <a href="#" class="footer__legal-link">Terms of Service</a>
-    </div>
+    <p class="footer__message-text">Transforming your <span class="footer__message-text-italic">body</span> shape with
+      us</p>
+    <nav class="footer__legal" aria-label="Legal">
+      <ul class="footer__legal-list">
+        <li class="footer__legal-item">
+          <a href="#" class="footer__legal-link">Privacy Policy</a>
+        </li>
+        <li class="footer__legal-item">
+          <a href="#" class="footer__legal-link">Terms of Service</a>
+        </li>
+      </ul>
+    </nav>
   </div>
   <div class="footer__subscribe">
-    <div class="footer__subscribe-title">Subscribe and learn about new exercises!</div>
+    <p class="footer__subscribe-title">Subscribe and learn about new exercises!</p>
     <form class="footer__subscribe-form" id="subscribeForm">
       <div class="footer__subscribe-form-field">
         <input type="email" class="footer__subscribe-form-input" id="subscribeEmail" placeholder="Email"
@@ -282,7 +294,7 @@
         <button type="submit" class="footer__subscribe-form-button">Subscribe</button>
       </div>
     </form>
-    <div class="footer__year">©2023</div>
+    <p class="footer__year">©2023</p>
   </div>
 </footer>
 
@@ -291,7 +303,7 @@
   <div class="exercise-modal__overlay"></div>
   <div class="exercise-modal__content">
     <button class="exercise-modal__close" id="js-exercise-modal-close" aria-label="Close modal">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
         <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round"></path>
       </svg>
@@ -308,53 +320,53 @@
 
         <div class="exercise-modal__rating" id="js-exercise-modal-rating">
           <span class="exercise-modal__rating-value"></span>
-          <div class="exercise-modal__rating-stars">
+          <div class="exercise-modal__rating-stars" aria-hidden="true">
             <svg class="exercise-modal__rating-star" width="18" height="18" viewBox="0 0 18 18" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
+              xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path
                 d="M9 0L11.0206 6.21885L17.5595 6.21885L12.2694 10.0623L14.2901 16.2812L9 12.4377L3.70993 16.2812L5.73056 10.0623L0.440492 6.21885L6.97937 6.21885L9 0Z" />
             </svg>
             <svg class="exercise-modal__rating-star" width="18" height="18" viewBox="0 0 18 18" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
+              xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path
                 d="M9 0L11.0206 6.21885L17.5595 6.21885L12.2694 10.0623L14.2901 16.2812L9 12.4377L3.70993 16.2812L5.73056 10.0623L0.440492 6.21885L6.97937 6.21885L9 0Z" />
             </svg>
             <svg class="exercise-modal__rating-star" width="18" height="18" viewBox="0 0 18 18" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
+              xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path
                 d="M9 0L11.0206 6.21885L17.5595 6.21885L12.2694 10.0623L14.2901 16.2812L9 12.4377L3.70993 16.2812L5.73056 10.0623L0.440492 6.21885L6.97937 6.21885L9 0Z" />
             </svg>
             <svg class="exercise-modal__rating-star" width="18" height="18" viewBox="0 0 18 18" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
+              xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path
                 d="M9 0L11.0206 6.21885L17.5595 6.21885L12.2694 10.0623L14.2901 16.2812L9 12.4377L3.70993 16.2812L5.73056 10.0623L0.440492 6.21885L6.97937 6.21885L9 0Z" />
             </svg>
             <svg class="exercise-modal__rating-star" width="18" height="18" viewBox="0 0 18 18" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
+              xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path
                 d="M9 0L11.0206 6.21885L17.5595 6.21885L12.2694 10.0623L14.2901 16.2812L9 12.4377L3.70993 16.2812L5.73056 10.0623L0.440492 6.21885L6.97937 6.21885L9 0Z" />
             </svg>
           </div>
         </div>
 
-        <div class="exercise-modal__details">
-          <div class="exercise-modal__detail-item">
+        <ul class="exercise-modal__details">
+          <li class="exercise-modal__detail-item">
             <span class="exercise-modal__detail-label">Target</span>
             <span class="exercise-modal__detail-value" id="js-exercise-modal-target"></span>
-          </div>
-          <div class="exercise-modal__detail-item">
+          </li>
+          <li class="exercise-modal__detail-item">
             <span class="exercise-modal__detail-label">Body Part</span>
             <span class="exercise-modal__detail-value" id="js-exercise-modal-body-part"></span>
-          </div>
-          <div class="exercise-modal__detail-item">
+          </li>
+          <li class="exercise-modal__detail-item">
             <span class="exercise-modal__detail-label">Equipment</span>
             <span class="exercise-modal__detail-value" id="js-exercise-modal-equipment"></span>
-          </div>
-          <div class="exercise-modal__detail-item">
+          </li>
+          <li class="exercise-modal__detail-item">
             <span class="exercise-modal__detail-label">Popular</span>
             <span class="exercise-modal__detail-value" id="js-exercise-modal-popular"></span>
-          </div>
-        </div>
+          </li>
+        </ul>
 
         <div class="exercise-modal__calories">
           <span class="exercise-modal__calories-value" id="js-exercise-modal-calories"></span>
@@ -366,7 +378,7 @@
         <div class="exercise-modal__actions">
           <button class="exercise-modal__btn exercise-modal__btn--favorites" id="js-exercise-modal-favorites">
             <span>Add to favorites</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path
                 d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -385,7 +397,7 @@
   <div class="rating-modal__overlay"></div>
   <div class="rating-modal__content">
     <button class="rating-modal__close" id="js-rating-modal-close" aria-label="Close modal">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
         <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round"></path>
       </svg>
@@ -394,10 +406,10 @@
     <div class="rating-modal__body">
       <h2 class="rating-modal__title" id="js-rating-modal-title">Rating</h2>
 
-      <div class="rating-modal__server-message" id="js-rating-server-message">
+      <div class="rating-modal__server-message" id="js-rating-server-message" role="status" aria-live="polite" aria-atomic="true">
         <span class="rating-modal__server-message-text" id="js-rating-server-message-text"></span>
         <button class="rating-modal__server-message-close" id="js-rating-server-message-close" aria-label="Close message">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
             <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
         </button>
@@ -409,35 +421,35 @@
           aria-label="Exercise rating">
           <label class="rating-modal__star" data-rating="1">
             <input class="rating-modal__star-input" type="radio" name="rating" value="1" aria-label="1 star">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
           </label>
           <label class="rating-modal__star" data-rating="2">
             <input class="rating-modal__star-input" type="radio" name="rating" value="2" aria-label="2 stars">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
           </label>
           <label class="rating-modal__star" data-rating="3">
             <input class="rating-modal__star-input" type="radio" name="rating" value="3" aria-label="3 stars">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
           </label>
           <label class="rating-modal__star" data-rating="4">
             <input class="rating-modal__star-input" type="radio" name="rating" value="4" aria-label="4 stars">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
           </label>
           <label class="rating-modal__star" data-rating="5">
             <input class="rating-modal__star-input" type="radio" name="rating" value="5" aria-label="5 stars">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
@@ -474,7 +486,7 @@
   <div class="global-notification__content">
     <span class="global-notification__text" id="js-global-notification-text"></span>
     <button class="global-notification__close" id="js-global-notification-close" aria-label="Close notification">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
         <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
       </svg>
     </button>
