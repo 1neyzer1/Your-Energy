@@ -1,3 +1,6 @@
+import { getQuote } from '../api.js';
+import { showGlobalNotification } from './global-notification.js';
+
 // Helper function to get today's date in YYYY-MM-DD format
 function getTodayDate() {
   const today = new Date();
@@ -25,8 +28,7 @@ async function loadQuoteOfTheDay() {
 
   // Fetch new quote from API
   try {
-    const response = await fetch('https://your-energy.b.goit.study/api/quote');
-    const data = await response.json();
+    const data = await getQuote();
 
     // Save to localStorage
     localStorage.setItem('quote-text', data.quote);
@@ -42,6 +44,9 @@ async function loadQuoteOfTheDay() {
     }
 
     // Return null if no data available
+    if (!cachedQuoteText || !cachedQuoteAuthor) {
+      showGlobalNotification('Failed to load quote of the day.', 'error');
+    }
     return null;
   }
 }

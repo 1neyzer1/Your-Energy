@@ -4,10 +4,13 @@ import {
   hideFieldError,
   validateEmail,
 } from './form-validation.js';
+import { patchExerciseRating } from '../api.js';
 
 let currentExerciseIdForRating = null;
 let onRatingSuccess = null;
 let listenersAttached = false;
+let lastFocusedElement = null;
+let focusableElements = [];
 
 function getModalElements() {
   const modal = document.getElementById('js-rating-modal');
@@ -32,6 +35,44 @@ function getModalElements() {
     ),
     starLabels: Array.from(modal.querySelectorAll('.rating-modal__star')),
   };
+}
+
+function getFocusableElements(modal) {
+  const selectors = [
+    'button:not([disabled])',
+    'a[href]',
+    'input:not([disabled])',
+    'textarea:not([disabled])',
+    'select:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])',
+  ];
+  return Array.from(modal.querySelectorAll(selectors.join(','))).filter(
+    element => !element.hasAttribute('aria-hidden')
+  );
+}
+
+function updateFocusableElements(modal) {
+  focusableElements = getFocusableElements(modal);
+}
+
+function trapFocus(event) {
+  if (event.key !== 'Tab' || focusableElements.length === 0) {
+    return;
+  }
+
+  const first = focusableElements[0];
+  const last = focusableElements[focusableElements.length - 1];
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+    return;
+  }
+
+  if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
 }
 
 function showServerMessage(message, type = 'error') {
@@ -128,7 +169,10 @@ function handleOverlayClick(event) {
 function handleKeydown(event) {
   if (event.key === 'Escape') {
     closeRatingModal();
+    return;
   }
+
+  trapFocus(event);
 }
 
 function handleStarChange(event) {
@@ -169,7 +213,7 @@ function handleServerMessageClose() {
   hideServerMessage();
 }
 
-function handleFormSubmit(event) {
+async function handleFormSubmit(event) {
   event.preventDefault();
   const elements = getModalElements();
   if (!elements) return;
@@ -188,7 +232,11 @@ function handleFormSubmit(event) {
   }
 
   if (!email) {
-    showFieldError(elements.emailInput, elements.emailError, 'Please enter your email');
+    showFieldError(
+      elements.emailInput,
+      elements.emailError,
+      'Please enter your email'
+    );
     hasErrors = true;
   } else if (!validateEmail(email)) {
     showFieldError(
@@ -218,45 +266,32 @@ function handleFormSubmit(event) {
 
   hideServerMessage();
 
-  fetch(
-    `https://your-energy.b.goit.study/api/exercises/${currentExerciseIdForRating}/rating`,
-    {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        rate: selectedRating,
-        email,
-        review,
-      }),
-    }
-  )
-    .then(async response => {
-      const data = await response.json();
-      if (!response.ok) {
-        throw { message: data.message, data };
-      }
-      return data;
-    })
-    .then(data => {
-      const exerciseName = data.name || 'the exercise';
-      const exerciseId = currentExerciseIdForRating;
-      const successCallback = onRatingSuccess;
-      closeRatingModal();
-      showGlobalNotification(
-        `Thank you, your review for exercise ${exerciseName} has been submitted`,
-        'success'
-      );
-      if (successCallback && exerciseId) {
-        successCallback(exerciseId);
-      }
-    })
-    .catch(error => {
-      const errorMessage =
-        error.message || 'Failed to submit rating. Please try again.';
-      showServerMessage(errorMessage, 'error');
+  try {
+    const data = await patchExerciseRating(currentExerciseIdForRating, {
+      rate: selectedRating,
+      email,
+      review,
     });
+
+    const exerciseName = data?.name || 'the exercise';
+    const exerciseId = currentExerciseIdForRating;
+    const successCallback = onRatingSuccess;
+
+    closeRatingModal();
+
+    showGlobalNotification(
+      `Thank you, your review for exercise ${exerciseName} has been submitted`,
+      'success'
+    );
+
+    if (successCallback && exerciseId) {
+      successCallback(exerciseId);
+    }
+  } catch (error) {
+    const errorMessage =
+      error.message || 'Failed to submit rating. Please try again.';
+    showServerMessage(errorMessage, 'error');
+  }
 }
 
 function attachListeners() {
@@ -317,12 +352,17 @@ export function openRatingModal(exerciseId, options = {}) {
 
   currentExerciseIdForRating = exerciseId;
   onRatingSuccess = options.onSuccess || null;
+  lastFocusedElement = document.activeElement;
 
   resetRatingForm();
   attachListeners();
 
   elements.modal.classList.add('rating-modal--open');
+  elements.modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+
+  updateFocusableElements(elements.modal);
+  focusableElements[0]?.focus();
 }
 
 function closeRatingModal() {
@@ -332,13 +372,26 @@ function closeRatingModal() {
   detachListeners();
 
   elements.modal.classList.remove('rating-modal--open');
+  elements.modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
   currentExerciseIdForRating = null;
   onRatingSuccess = null;
+
+  if (
+    lastFocusedElement &&
+    typeof lastFocusedElement.focus === 'function' &&
+    document.contains(lastFocusedElement)
+  ) {
+    lastFocusedElement.focus();
+  }
+  lastFocusedElement = null;
 }
 
 export { closeRatingModal };
 
 export function initRatingModal() {
-  getModalElements();
+  const elements = getModalElements();
+  if (elements?.modal) {
+    elements.modal.setAttribute('aria-hidden', 'true');
+  }
 }

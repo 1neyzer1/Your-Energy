@@ -20,21 +20,37 @@ const request = async (url, options = {}) => {
     ...options,
   });
 
+  const hasBody = response.status !== 204;
+  const contentType = response.headers.get('content-type') || '';
+  let data = null;
+
+  if (hasBody) {
+    if (contentType.includes('application/json')) {
+      data = await response.json().catch(() => null);
+    } else {
+      data = await response.text().catch(() => null);
+    }
+  }
+
   if (!response.ok) {
-    const message = await response.text().catch(() => 'Request failed');
-    throw new Error(message || 'Request failed');
+    const message =
+      data && typeof data === 'object' && data.message
+        ? data.message
+        : typeof data === 'string'
+        ? data
+        : 'Request failed';
+    const error = new Error(message);
+    error.status = response.status;
+    error.data = data;
+    throw error;
   }
 
-  if (response.status === 204) {
-    return null;
-  }
-
-  return response.json();
+  return data;
 };
 
 export const getQuote = () => request(buildUrl('/quote'));
 
-export const getFilters = ({ filter, page = 1, limit = 6 } = {}) =>
+export const getFilters = ({ filter, page = 1, limit = 12 } = {}) =>
   request(buildUrl('/filters', { filter, page, limit }));
 
 export const getExercises = ({ page = 1, limit = 8, ...params } = {}) =>

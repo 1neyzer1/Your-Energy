@@ -58,6 +58,7 @@
     font-size: 14px;
     color: rgba(244, 244, 244, 0.6);
     margin-top: auto;
+    margin-bottom: 0;
   }
 
   &__message {
@@ -73,6 +74,7 @@
     font-size: 56px;
     font-weight: 400;
     color: var(--color-light);
+    margin: 0;
 
     &-italic {
       font-style: italic;
@@ -80,11 +82,27 @@
   }
 
   &__legal {
-    display: flex;
-    gap: var(--spacing-sm);
+    width: 100%;
     font-size: 14px;
     margin-top: auto;
-    width: 100%;
+
+    &-list {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    &-item {
+      display: flex;
+      align-items: center;
+    }
+
+    &-item + &-item::before {
+      content: '/';
+      color: rgba(244, 244, 244, 0.6);
+      margin: 0 var(--spacing-sm);
+    }
   
     &-link {
       color: var(--color-light);
@@ -107,6 +125,7 @@
       font-size: 15px;
       font-weight: 400;
       color: var(--color-light);
+      margin: 0;
     }
   
     &-form {
@@ -169,6 +188,7 @@
     font-size: 14px;
     color: rgba(244, 244, 244, 0.6);
     margin-top: auto;
+    margin-bottom: 0;
   }
 }
 

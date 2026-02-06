@@ -160,7 +160,9 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-md);
-    margin-top: var(--spacing-sm);
+    margin: var(--spacing-sm) 0 0;
+    list-style: none;
+    padding: 0;
   }
 
   &__detail-item {

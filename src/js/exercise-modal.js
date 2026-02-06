@@ -2,9 +2,13 @@ import { openRatingModal } from './rating-modal.js';
 import { isFavorite, toggleFavorite } from './favorites.js';
 import { getCurrentPage } from './header.js';
 import { loadFavoritesExercises } from './exercises.js';
+import { getExerciseById } from '../api.js';
+import { showGlobalNotification } from './global-notification.js';
 
 let currentExerciseIdForRating = null;
 let listenersAttached = false;
+let lastFocusedElement = null;
+let focusableElements = [];
 
 function getModalElements() {
   const modal = document.getElementById('js-exercise-modal');
@@ -31,6 +35,44 @@ function getModalElements() {
   };
 }
 
+function getFocusableElements(modal) {
+  const selectors = [
+    'button:not([disabled])',
+    'a[href]',
+    'input:not([disabled])',
+    'textarea:not([disabled])',
+    'select:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])',
+  ];
+  return Array.from(modal.querySelectorAll(selectors.join(','))).filter(
+    element => !element.hasAttribute('aria-hidden')
+  );
+}
+
+function updateFocusableElements(modal) {
+  focusableElements = getFocusableElements(modal);
+}
+
+function trapFocus(event) {
+  if (event.key !== 'Tab' || focusableElements.length === 0) {
+    return;
+  }
+
+  const first = focusableElements[0];
+  const last = focusableElements[focusableElements.length - 1];
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+    return;
+  }
+
+  if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
 function handleClose() {
   closeExerciseModal();
 }
@@ -44,7 +86,10 @@ function handleOverlayClick(event) {
 function handleKeydown(event) {
   if (event.key === 'Escape') {
     closeExerciseModal();
+    return;
   }
+
+  trapFocus(event);
 }
 
 function handleFavoriteClick() {
@@ -125,16 +170,20 @@ function updateFavoriteButton(exerciseId) {
   }
 }
 
-export function openExerciseModal(exerciseId) {
+export async function openExerciseModal(exerciseId) {
   const elements = getModalElements();
   if (!elements) return;
 
   currentExerciseIdForRating = exerciseId;
+  lastFocusedElement = document.activeElement;
 
   elements.modal.classList.add('exercise-modal--open');
+  elements.modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
 
   attachListeners();
+  updateFocusableElements(elements.modal);
+  focusableElements[0]?.focus();
 
   if (elements.title) elements.title.textContent = 'Loading...';
   if (elements.ratingValue) elements.ratingValue.textContent = '0.0';
@@ -155,73 +204,70 @@ export function openExerciseModal(exerciseId) {
     elements.video.pause();
   }
 
-  fetch(`https://your-energy.b.goit.study/api/exercises/${exerciseId}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to fetch exercise details');
-      }
-      return response.json();
-    })
-    .then(exercise => {
-      const videoUrl = exercise.videoUrl || exercise.video || exercise.videoURL;
+  try {
+    const exercise = await getExerciseById(exerciseId);
+    const videoUrl = exercise.videoUrl || exercise.video || exercise.videoURL;
 
-      if (videoUrl && elements.video) {
-        elements.video.src = videoUrl;
-        elements.video.classList.add('is-visible');
-        if (elements.image) {
-          elements.image.classList.add('is-hidden');
+    if (videoUrl && elements.video) {
+      elements.video.src = videoUrl;
+      elements.video.classList.add('is-visible');
+      if (elements.image) {
+        elements.image.classList.add('is-hidden');
+      }
+    } else if (elements.image) {
+      elements.image.src = exercise.gifUrl || '';
+    }
+
+    if (elements.title) elements.title.textContent = exercise.name || '';
+    if (elements.target) elements.target.textContent = exercise.target || '';
+    if (elements.bodyPart)
+      elements.bodyPart.textContent = exercise.bodyPart || '';
+    if (elements.equipment)
+      elements.equipment.textContent = exercise.equipment || '';
+    if (elements.popular)
+      elements.popular.textContent = exercise.popularity || 0;
+    if (elements.calories)
+      elements.calories.textContent = exercise.burnedCalories || 0;
+    if (elements.time)
+      elements.time.textContent = `/${exercise.time || 0} min`;
+    if (elements.description)
+      elements.description.textContent = exercise.description || '';
+
+    if (elements.ratingValue) {
+      elements.ratingValue.textContent = (exercise.rating || 0).toFixed(1);
+    }
+
+    if (elements.ratingStars) {
+      const stars = elements.ratingStars.querySelectorAll(
+        '.exercise-modal__rating-star'
+      );
+      const rating = Math.round(exercise.rating || 0);
+
+      stars.forEach((star, index) => {
+        const path = star.querySelector('path');
+        if (index < rating) {
+          path.setAttribute('fill', '#EEA10C');
+          path.removeAttribute('stroke');
+          path.removeAttribute('stroke-width');
+        } else {
+          path.setAttribute('fill', 'none');
+          path.setAttribute('stroke', 'rgba(255,255,255,0.3)');
+          path.setAttribute('stroke-width', '1.5');
         }
-      } else if (elements.image) {
-        elements.image.src = exercise.gifUrl || '';
-      }
+      });
+    }
 
-      if (elements.title) elements.title.textContent = exercise.name || '';
-      if (elements.target) elements.target.textContent = exercise.target || '';
-      if (elements.bodyPart)
-        elements.bodyPart.textContent = exercise.bodyPart || '';
-      if (elements.equipment)
-        elements.equipment.textContent = exercise.equipment || '';
-      if (elements.popular)
-        elements.popular.textContent = exercise.popularity || 0;
-      if (elements.calories)
-        elements.calories.textContent = exercise.burnedCalories || 0;
-      if (elements.time)
-        elements.time.textContent = `/${exercise.time || 0} min`;
-      if (elements.description)
-        elements.description.textContent = exercise.description || '';
-
-      if (elements.ratingValue) {
-        elements.ratingValue.textContent = (exercise.rating || 0).toFixed(1);
-      }
-
-      if (elements.ratingStars) {
-        const stars = elements.ratingStars.querySelectorAll(
-          '.exercise-modal__rating-star'
-        );
-        const rating = Math.round(exercise.rating || 0);
-
-        stars.forEach((star, index) => {
-          const path = star.querySelector('path');
-          if (index < rating) {
-            path.setAttribute('fill', '#EEA10C');
-            path.removeAttribute('stroke');
-            path.removeAttribute('stroke-width');
-          } else {
-            path.setAttribute('fill', 'none');
-            path.setAttribute('stroke', 'rgba(255,255,255,0.3)');
-            path.setAttribute('stroke-width', '1.5');
-          }
-        });
-      }
-
-      updateFavoriteButton(exerciseId);
-    })
-    .catch(() => {
-      if (elements.title) elements.title.textContent = 'Error loading exercise';
-      if (elements.description)
-        elements.description.textContent =
-          'Failed to load exercise details. Please try again later.';
-    });
+    updateFavoriteButton(exerciseId);
+  } catch (error) {
+    if (elements.title) elements.title.textContent = 'Error loading exercise';
+    if (elements.description)
+      elements.description.textContent =
+        'Failed to load exercise details. Please try again later.';
+    showGlobalNotification(
+      error.message || 'Failed to load exercise details.',
+      'error'
+    );
+  }
 }
 
 export function closeExerciseModal() {
@@ -231,6 +277,7 @@ export function closeExerciseModal() {
   detachListeners();
 
   elements.modal.classList.remove('exercise-modal--open');
+  elements.modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
   currentExerciseIdForRating = null;
 
@@ -239,8 +286,20 @@ export function closeExerciseModal() {
     elements.video.src = '';
     elements.video.classList.remove('is-visible');
   }
+
+  if (
+    lastFocusedElement &&
+    typeof lastFocusedElement.focus === 'function' &&
+    document.contains(lastFocusedElement)
+  ) {
+    lastFocusedElement.focus();
+  }
+  lastFocusedElement = null;
 }
 
 export function initExerciseModal() {
-  getModalElements();
+  const elements = getModalElements();
+  if (elements?.modal) {
+    elements.modal.setAttribute('aria-hidden', 'true');
+  }
 }

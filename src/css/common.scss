@@ -7,6 +7,21 @@ body {
   font-family: var(--font-family);
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.is-hidden {
+  display: none;
+}
+
 @media (max-width: 1279px) {
   body {
     padding: 0 var(--spacing-lg);
