@@ -213,9 +213,9 @@ function getModalElements() {
     ratingValue: document.getElementById('js-rating-modal-value'),
     ratingError: document.getElementById('js-rating-error'),
     form: document.getElementById('js-rating-modal-form'),
-    emailInput: document.getElementById('js-rating-modal-email'),
+    emailInput: document.getElementById('rating-email'),
     emailError: document.getElementById('js-email-error'),
-    commentTextarea: document.getElementById('js-rating-modal-comment'),
+    commentTextarea: document.getElementById('rating-comment'),
     commentError: document.getElementById('js-comment-error'),
     starInputs: Array.from(
       modal.querySelectorAll('.rating-modal__star-input')

@@ -52,7 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Обробка форми підписки
   const subscribeForm = document.getElementById('subscribeForm');
-  const subscribeEmailInput = document.getElementById('subscribeEmail');
+  const subscribeEmailInput = document.getElementById(
+    'footer-subscribe-email'
+  );
   const subscribeEmailError = document.getElementById('subscribeEmailError');
 
   // Clear error on input

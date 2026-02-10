@@ -68,13 +68,15 @@
         </div>
 
         <div class="rating-modal__field">
-          <input type="email" class="rating-modal__input" id="js-rating-modal-email" placeholder="Email"
+          <label class="visually-hidden" for="rating-email">Email</label>
+          <input type="email" class="rating-modal__input" id="rating-email" placeholder="Email"
             aria-label="Email address" autocomplete="email" required>
           <div class="rating-modal__error" id="js-email-error"></div>
         </div>
 
         <div class="rating-modal__field">
-          <textarea class="rating-modal__textarea" id="js-rating-modal-comment" placeholder="Your comment" rows="4"
+          <label class="visually-hidden" for="rating-comment">Comment</label>
+          <textarea class="rating-modal__textarea" id="rating-comment" placeholder="Your comment" rows="4"
             aria-label="Your comment" required></textarea>
           <div class="rating-modal__error" id="js-comment-error"></div>
         </div>

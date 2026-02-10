@@ -55,7 +55,7 @@ function handleRatingClick() {
   const exerciseId = currentExerciseIdForRating;
   if (!exerciseId) return;
 
-  closeExerciseModal();
+  closeExerciseModal({ restoreFocus: false });
   openRatingModal(exerciseId, {
     onSuccess: () => openExerciseModal(exerciseId),
   });
@@ -221,13 +221,13 @@ export async function openExerciseModal(exerciseId) {
   }
 }
 
-export function closeExerciseModal() {
+export function closeExerciseModal(options = {}) {
   const elements = getModalElements();
   if (!elements) return;
 
   detachListeners();
 
-  closeModal('js-exercise-modal');
+  closeModal('js-exercise-modal', options);
   currentExerciseIdForRating = null;
 
   if (elements.video) {

@@ -23,6 +23,7 @@ const exercisesCache = new Map();
 const requestState = {
   filters: { controller: null, requestId: 0 },
   exercises: { controller: null, requestId: 0 },
+  favorites: { controller: null, requestId: 0 },
 };
 
 const getCardsContainer = () => document.getElementById('js-exercises-cards');
@@ -683,16 +684,28 @@ export async function loadFavoritesExercises() {
   }
 
   if (favoriteIds.length === 0) {
+    cancelRequest(requestState.favorites);
     renderFavoritesEmptyState();
     return;
   }
 
+  const { controller, requestId } = beginRequest(requestState.favorites);
   setCardsBusy(true);
 
   try {
     const results = await Promise.allSettled(
-      favoriteIds.map(id => getExerciseById(id))
+      favoriteIds.map(id =>
+        getExerciseById(id, { signal: controller.signal })
+      )
     );
+
+    if (
+      !isLatestRequest(requestState.favorites, requestId) ||
+      currentMode !== 'favorites'
+    ) {
+      return;
+    }
+
     const validExercises = results
       .filter(result => result.status === 'fulfilled' && result.value)
       .map(result => result.value);
@@ -703,13 +716,21 @@ export async function loadFavoritesExercises() {
       renderFavoritesEmptyState();
     }
   } catch (error) {
+    if (
+      !isLatestRequest(requestState.favorites, requestId) ||
+      isAbortError(error)
+    ) {
+      return;
+    }
     renderFavoritesEmptyState();
     showGlobalNotification(
       error.message || 'Failed to load favorite exercises.',
       'error'
     );
   } finally {
-    setCardsBusy(false);
+    if (isLatestRequest(requestState.favorites, requestId)) {
+      setCardsBusy(false);
+    }
   }
 }
 
@@ -768,6 +789,7 @@ export function switchToHome() {
   currentMode = 'home';
   currentCategory = null;
   currentSearchKeyword = '';
+  cancelRequest(requestState.favorites);
 
   const contentContainer = getContentContainer();
   if (contentContainer) {

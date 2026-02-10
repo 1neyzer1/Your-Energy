@@ -127,8 +127,9 @@
         background: var(--color-light);
         border: 1px solid rgba(0, 0, 0, 0.2);
         border-radius: 30px;
-        padding: 10px 48px 10px 20px;
-        min-width: 240px;
+        height: 48px;
+        padding: 12px 48px 12px 20px;
+        min-width: 273px;
         outline: none;
         transition: border-color 0.2s ease;
 
@@ -144,7 +145,7 @@
 
       &-submit {
         position: absolute;
-        right: 12px;
+        right: 16px;
         background: transparent;
         border: none;
         padding: 0;
@@ -170,7 +171,7 @@
     &-filters {
       display: flex;
       align-items: center;
-      gap: var(--spacing-lg);
+      gap: var(--spacing-md);
       list-style: none;
       margin: 0;
       padding: 0;
@@ -614,12 +615,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
     margin-top: var(--spacing-xl);
 
     &-page {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -647,8 +648,8 @@
     }
 
     &-arrow {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -674,8 +675,8 @@
     }
 
     &-ellipsis {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -827,6 +828,26 @@
 
         &--exercises {
           grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1280px) {
+  .exercises__content {
+    &__main {
+      &__aside {
+        &__quote {
+          min-height: 242px;
+        }
+
+        &__image {
+          height: 242px;
+        }
+
+        &__norm {
+          min-height: 315px;
         }
       }
     }

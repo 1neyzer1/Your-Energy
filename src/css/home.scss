@@ -1,5 +1,5 @@
 .home__content {
-  padding: var(--spacing-3xl) var(--spacing-xl);
+  padding: var(--spacing-3xl) 0;
   max-width: 1440px;
   margin: 0 auto;
   background-color: var(--color-bg-light);
@@ -9,21 +9,31 @@
   display: flex;
   justify-content: space-between;
   gap: var(--spacing-xl);
+  align-items: flex-start;
 }
 
 .home__title {
   width: 100%;
-  max-width: 600px;
+  max-width: 639px;
   font-size: 72px;
   font-weight: 400;
+  line-height: 74px;
+  letter-spacing: -0.02em;
   color: var(--color-dark);
   margin-block: 0;
 
-  // &-decor {
-  //   display: inline-block;
-  //   margin-right: var(--spacing-sm);
-  //   font-size: var(--font-size-4xl);
-  // }
+  &-decor {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: var(--spacing-sm);
+
+    img {
+      width: 59px;
+      height: 59px;
+      display: block;
+    }
+  }
 
   &-italic {
     // font-family: var(--font-family-italic);
@@ -34,13 +44,16 @@
 .home__description {
   font-size: 18px;
   color: var(--color-dark);
-  max-width: 550px;
+  max-width: 528px;
+  line-height: 24px;
+  margin: var(--spacing-sm) 0 0;
 }
 
 .home__sidebar {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  width: 197px;
 }
 
 .home__image-small {
@@ -58,18 +71,20 @@
 }
 
 .home__hashtags {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-sm);
-  margin-top: var(--spacing-lg);
+  margin-top: var(--spacing-sm);
   list-style: none;
   margin-bottom: 0;
   padding: 0;
 
   &-item {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: 4px 12px;
     border-radius: 16px;
     font-size: 16px;
+    line-height: 24px;
     color: var(--color-dark);
     text-align: center;
     border: 1px solid var(--color-dark);
@@ -87,7 +102,7 @@
 
   img {
     width: 100%;
-    height: 400px;
+    height: 350px;
     border-radius: 60px;
     object-fit: cover;
     display: block;
@@ -96,7 +111,7 @@
 
 @media (max-width: 1279px) {
   .home__content {
-    padding: var(--spacing-2xl) var(--spacing-xl);
+    padding: var(--spacing-2xl) 0;
   }
 
   .home__main {
@@ -106,10 +121,12 @@
 
   .home__title {
     font-size: 56px;
+    line-height: 60px;
   }
 
   .home__sidebar {
     align-items: flex-start;
+    width: 100%;
   }
 
   .home__hero img {
@@ -120,11 +137,12 @@
 
 @media (max-width: 767px) {
   .home__content {
-    padding: var(--spacing-xl) var(--spacing-md);
+    padding: var(--spacing-xl) 0;
   }
 
   .home__title {
     font-size: 36px;
+    line-height: 40px;
   }
 
   .home__description {
