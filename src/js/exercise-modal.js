@@ -1,4 +1,4 @@
-import { openRatingModal } from './rating-modal.js';
+import { closeModal, openModal, openRatingModal } from './rating-modal.js';
 import { isFavorite, toggleFavorite } from './favorites.js';
 import { getCurrentPage } from './header.js';
 import { loadFavoritesExercises } from './exercises.js';
@@ -7,8 +7,8 @@ import { showGlobalNotification } from './global-notification.js';
 
 let currentExerciseIdForRating = null;
 let listenersAttached = false;
-let lastFocusedElement = null;
-let focusableElements = [];
+let exerciseRequestController = null;
+let exerciseRequestId = 0;
 
 function getModalElements() {
   const modal = document.getElementById('js-exercise-modal');
@@ -16,7 +16,6 @@ function getModalElements() {
 
   return {
     modal,
-    overlay: modal.querySelector('.exercise-modal__overlay'),
     closeBtn: document.getElementById('js-exercise-modal-close'),
     image: document.getElementById('js-exercise-modal-image'),
     video: document.getElementById('js-exercise-modal-video'),
@@ -35,61 +34,8 @@ function getModalElements() {
   };
 }
 
-function getFocusableElements(modal) {
-  const selectors = [
-    'button:not([disabled])',
-    'a[href]',
-    'input:not([disabled])',
-    'textarea:not([disabled])',
-    'select:not([disabled])',
-    '[tabindex]:not([tabindex="-1"])',
-  ];
-  return Array.from(modal.querySelectorAll(selectors.join(','))).filter(
-    element => !element.hasAttribute('aria-hidden')
-  );
-}
-
-function updateFocusableElements(modal) {
-  focusableElements = getFocusableElements(modal);
-}
-
-function trapFocus(event) {
-  if (event.key !== 'Tab' || focusableElements.length === 0) {
-    return;
-  }
-
-  const first = focusableElements[0];
-  const last = focusableElements[focusableElements.length - 1];
-
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last.focus();
-    return;
-  }
-
-  if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first.focus();
-  }
-}
-
 function handleClose() {
   closeExerciseModal();
-}
-
-function handleOverlayClick(event) {
-  if (event.target === event.currentTarget) {
-    closeExerciseModal();
-  }
-}
-
-function handleKeydown(event) {
-  if (event.key === 'Escape') {
-    closeExerciseModal();
-    return;
-  }
-
-  trapFocus(event);
 }
 
 function handleFavoriteClick() {
@@ -121,10 +67,8 @@ function attachListeners() {
   if (!elements) return;
 
   elements.closeBtn?.addEventListener('click', handleClose);
-  elements.overlay?.addEventListener('click', handleOverlayClick);
   elements.favoriteBtn?.addEventListener('click', handleFavoriteClick);
   elements.ratingBtn?.addEventListener('click', handleRatingClick);
-  document.addEventListener('keydown', handleKeydown);
 
   listenersAttached = true;
 }
@@ -135,10 +79,8 @@ function detachListeners() {
   if (!elements) return;
 
   elements.closeBtn?.removeEventListener('click', handleClose);
-  elements.overlay?.removeEventListener('click', handleOverlayClick);
   elements.favoriteBtn?.removeEventListener('click', handleFavoriteClick);
   elements.ratingBtn?.removeEventListener('click', handleRatingClick);
-  document.removeEventListener('keydown', handleKeydown);
 
   listenersAttached = false;
 }
@@ -175,15 +117,16 @@ export async function openExerciseModal(exerciseId) {
   if (!elements) return;
 
   currentExerciseIdForRating = exerciseId;
-  lastFocusedElement = document.activeElement;
+  if (exerciseRequestController) {
+    exerciseRequestController.abort();
+  }
+  exerciseRequestController = new AbortController();
+  exerciseRequestId += 1;
+  const requestId = exerciseRequestId;
 
-  elements.modal.classList.add('exercise-modal--open');
-  elements.modal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
+  openModal('js-exercise-modal', { onClose: closeExerciseModal });
 
   attachListeners();
-  updateFocusableElements(elements.modal);
-  focusableElements[0]?.focus();
 
   if (elements.title) elements.title.textContent = 'Loading...';
   if (elements.ratingValue) elements.ratingValue.textContent = '0.0';
@@ -205,7 +148,12 @@ export async function openExerciseModal(exerciseId) {
   }
 
   try {
-    const exercise = await getExerciseById(exerciseId);
+    const exercise = await getExerciseById(exerciseId, {
+      signal: exerciseRequestController.signal,
+    });
+    if (requestId !== exerciseRequestId) {
+      return;
+    }
     const videoUrl = exercise.videoUrl || exercise.video || exercise.videoURL;
 
     if (videoUrl && elements.video) {
@@ -259,6 +207,9 @@ export async function openExerciseModal(exerciseId) {
 
     updateFavoriteButton(exerciseId);
   } catch (error) {
+    if (error?.name === 'AbortError') {
+      return;
+    }
     if (elements.title) elements.title.textContent = 'Error loading exercise';
     if (elements.description)
       elements.description.textContent =
@@ -276,9 +227,7 @@ export function closeExerciseModal() {
 
   detachListeners();
 
-  elements.modal.classList.remove('exercise-modal--open');
-  elements.modal.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
+  closeModal('js-exercise-modal');
   currentExerciseIdForRating = null;
 
   if (elements.video) {
@@ -287,14 +236,10 @@ export function closeExerciseModal() {
     elements.video.classList.remove('is-visible');
   }
 
-  if (
-    lastFocusedElement &&
-    typeof lastFocusedElement.focus === 'function' &&
-    document.contains(lastFocusedElement)
-  ) {
-    lastFocusedElement.focus();
+  if (exerciseRequestController) {
+    exerciseRequestController.abort();
+    exerciseRequestController = null;
   }
-  lastFocusedElement = null;
 }
 
 export function initExerciseModal() {

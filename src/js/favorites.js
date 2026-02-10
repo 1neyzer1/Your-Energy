@@ -1,23 +1,73 @@
-// LocalStorage key for favorites
-const FAVORITES_KEY = 'favorites';
+const FAVORITES_KEY = 'your-energy:favorites';
+const LEGACY_FAVORITES_KEY = 'favorites';
 
-// Get all favorite exercise IDs from LocalStorage
-export function getFavorites() {
+export function safeJsonParse(value, fallback) {
+  if (!value) {
+    return fallback;
+  }
   try {
-    const favorites = localStorage.getItem(FAVORITES_KEY);
-    return favorites ? JSON.parse(favorites) : [];
+    return JSON.parse(value);
   } catch (error) {
-    return [];
+    return fallback;
   }
 }
 
-// Add exercise ID to favorites
+export function loadFavorites() {
+  try {
+    const stored = safeJsonParse(localStorage.getItem(FAVORITES_KEY), null);
+    const favorites = new Set();
+
+    if (Array.isArray(stored)) {
+      stored.forEach(id => {
+        if (id !== null && id !== undefined && id !== '') {
+          favorites.add(String(id));
+        }
+      });
+      return favorites;
+    }
+
+    const legacy = safeJsonParse(
+      localStorage.getItem(LEGACY_FAVORITES_KEY),
+      null
+    );
+
+    if (Array.isArray(legacy)) {
+      legacy.forEach(id => {
+        if (id !== null && id !== undefined && id !== '') {
+          favorites.add(String(id));
+        }
+      });
+      saveFavorites(favorites);
+      localStorage.removeItem(LEGACY_FAVORITES_KEY);
+    }
+
+    return favorites;
+  } catch (error) {
+    return new Set();
+  }
+}
+
+export function saveFavorites(favorites) {
+  try {
+    const normalized = Array.from(favorites || []).map(id => String(id));
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(normalized));
+    localStorage.removeItem(LEGACY_FAVORITES_KEY);
+  } catch (error) {
+    // Ignore write errors to keep UX responsive.
+  }
+}
+
+export function getFavorites() {
+  return Array.from(loadFavorites());
+}
+
 export function addToFavorites(exerciseId) {
   try {
-    const favorites = getFavorites();
-    if (!favorites.includes(exerciseId)) {
-      favorites.push(exerciseId);
-      localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+    const favorites = loadFavorites();
+    const id = String(exerciseId);
+    if (!favorites.has(id)) {
+      favorites.add(id);
+      saveFavorites(favorites);
       return true;
     }
     return false;
@@ -26,32 +76,30 @@ export function addToFavorites(exerciseId) {
   }
 }
 
-// Remove exercise ID from favorites
 export function removeFromFavorites(exerciseId) {
   try {
-    const favorites = getFavorites();
-    const filteredFavorites = favorites.filter(id => id !== exerciseId);
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(filteredFavorites));
+    const favorites = loadFavorites();
+    const id = String(exerciseId);
+    if (favorites.has(id)) {
+      favorites.delete(id);
+      saveFavorites(favorites);
+    }
     return true;
   } catch (error) {
     return false;
   }
 }
 
-// Check if exercise is in favorites
 export function isFavorite(exerciseId) {
-  const favorites = getFavorites();
-  return favorites.includes(exerciseId);
+  const favorites = loadFavorites();
+  return favorites.has(String(exerciseId));
 }
 
-// Toggle favorite status (add if not exists, remove if exists)
 export function toggleFavorite(exerciseId) {
   if (isFavorite(exerciseId)) {
     removeFromFavorites(exerciseId);
-    return false; // removed
-  } else {
-    addToFavorites(exerciseId);
-    return true; // added
+    return false;
   }
+  addToFavorites(exerciseId);
+  return true;
 }
-

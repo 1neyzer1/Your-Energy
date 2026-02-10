@@ -11,6 +11,19 @@ let currentMode = 'home';
 
 const FILTERS_LIMIT = 12;
 const EXERCISES_LIMIT = 8;
+const FILTER_PARAM_MAP = {
+  Muscles: 'muscles',
+  'Body parts': 'bodypart',
+  Equipment: 'equipment',
+};
+
+const filtersCache = new Map();
+const exercisesCache = new Map();
+
+const requestState = {
+  filters: { controller: null, requestId: 0 },
+  exercises: { controller: null, requestId: 0 },
+};
 
 const getCardsContainer = () => document.getElementById('js-exercises-cards');
 const getPaginationContainer = () =>
@@ -22,6 +35,55 @@ const getHeading = () => document.getElementById('js-exercises-heading');
 const getBreadcrumbs = () => document.getElementById('js-exercises-breadcrumbs');
 const getContentContainer = () =>
   document.querySelector('.exercises__content');
+
+function beginRequest(state) {
+  if (state.controller) {
+    state.controller.abort();
+  }
+  const controller = new AbortController();
+  state.controller = controller;
+  state.requestId += 1;
+  return { controller, requestId: state.requestId };
+}
+
+function cancelRequest(state) {
+  if (state.controller) {
+    state.controller.abort();
+  }
+  state.controller = null;
+  state.requestId += 1;
+}
+
+function isLatestRequest(state, requestId) {
+  return state.requestId === requestId;
+}
+
+function isAbortError(error) {
+  return error?.name === 'AbortError';
+}
+
+function getFiltersCache(filter, page, limit) {
+  const filterCache = filtersCache.get(filter);
+  if (!filterCache) {
+    return null;
+  }
+  return filterCache.get(`${page}:${limit}`) || null;
+}
+
+function setFiltersCache(filter, page, limit, data) {
+  if (!filtersCache.has(filter)) {
+    filtersCache.set(filter, new Map());
+  }
+  filtersCache.get(filter).set(`${page}:${limit}`, data);
+}
+
+function getExercisesCache(key) {
+  return exercisesCache.get(key) || null;
+}
+
+function setExercisesCache(key, data) {
+  exercisesCache.set(key, data);
+}
 
 function setCardsBusy(isBusy) {
   const cardsContainer = getCardsContainer();
@@ -339,6 +401,37 @@ function renderFavoritesEmptyState() {
   );
 }
 
+function renderCategoryResponse(data, page) {
+  const categories = data?.results || data?.exercises || data || [];
+  const totalPages =
+    data?.totalPages || data?.total_pages || data?.pageCount || 1;
+
+  updateBreadcrumbs(null);
+
+  if (Array.isArray(categories) && categories.length > 0) {
+    renderCategoryCards(categories);
+    renderPagination(totalPages, page);
+  } else {
+    renderCategoriesEmptyState();
+    renderPagination(1, 1);
+  }
+}
+
+function renderExercisesResponse(data, page, categoryName) {
+  const exercises = data?.results || [];
+  const totalPages = data?.totalPages || 1;
+
+  updateBreadcrumbs(categoryName);
+
+  if (Array.isArray(exercises) && exercises.length > 0) {
+    renderExerciseCards(exercises);
+    renderPagination(totalPages, page);
+  } else {
+    renderExercisesEmptyState();
+    renderPagination(1, 1);
+  }
+}
+
 function renderPagination(totalPages, page = 1) {
   const paginationContainer = getPaginationContainer();
   if (!paginationContainer) {
@@ -352,6 +445,8 @@ function renderPagination(totalPages, page = 1) {
   if (totalPages <= 1) {
     return;
   }
+
+  const fragment = document.createDocumentFragment();
 
   const goToPage = pageNumber => {
     currentPage = pageNumber;
@@ -372,10 +467,10 @@ function renderPagination(totalPages, page = 1) {
     return button;
   };
 
-  paginationContainer.appendChild(
+  fragment.appendChild(
     createArrowButton('&laquo;', page === 1, () => goToPage(1))
   );
-  paginationContainer.appendChild(
+  fragment.appendChild(
     createArrowButton('&lsaquo;', page === 1, () => goToPage(page - 1))
   );
 
@@ -396,28 +491,30 @@ function renderPagination(totalPages, page = 1) {
 
   if (totalPages <= 5) {
     for (let i = 1; i <= totalPages; i++) {
-      paginationContainer.appendChild(createPageButton(i));
+      fragment.appendChild(createPageButton(i));
     }
   } else {
-    paginationContainer.appendChild(createPageButton(1));
-    paginationContainer.appendChild(createPageButton(2));
-    paginationContainer.appendChild(createPageButton(3));
+    fragment.appendChild(createPageButton(1));
+    fragment.appendChild(createPageButton(2));
+    fragment.appendChild(createPageButton(3));
 
     const ellipsis = document.createElement('span');
     ellipsis.className = 'exercises__content__pagination-ellipsis';
     ellipsis.textContent = '...';
-    paginationContainer.appendChild(ellipsis);
+    fragment.appendChild(ellipsis);
 
-    paginationContainer.appendChild(createPageButton(totalPages - 1));
-    paginationContainer.appendChild(createPageButton(totalPages));
+    fragment.appendChild(createPageButton(totalPages - 1));
+    fragment.appendChild(createPageButton(totalPages));
   }
 
-  paginationContainer.appendChild(
+  fragment.appendChild(
     createArrowButton('&rsaquo;', page === totalPages, () => goToPage(page + 1))
   );
-  paginationContainer.appendChild(
+  fragment.appendChild(
     createArrowButton('&raquo;', page === totalPages, () => goToPage(totalPages))
   );
+
+  paginationContainer.appendChild(fragment);
 }
 
 export async function loadExerciseCards(filter, page = 1) {
@@ -431,6 +528,19 @@ export async function loadExerciseCards(filter, page = 1) {
   currentSearchKeyword = '';
 
   hideSearchField();
+  cancelRequest(requestState.exercises);
+
+  const { controller, requestId } = beginRequest(requestState.filters);
+  const cached = getFiltersCache(filter, page, FILTERS_LIMIT);
+
+  if (cached) {
+    renderCategoryResponse(cached, page);
+    if (isLatestRequest(requestState.filters, requestId)) {
+      setCardsBusy(false);
+    }
+    return;
+  }
+
   setCardsBusy(true);
 
   try {
@@ -438,28 +548,35 @@ export async function loadExerciseCards(filter, page = 1) {
       filter,
       page,
       limit: FILTERS_LIMIT,
+      signal: controller.signal,
     });
 
-    const categories = data?.results || data?.exercises || data || [];
-    const totalPages =
-      data?.totalPages || data?.total_pages || data?.pageCount || 1;
-
-    updateBreadcrumbs(null);
-
-    if (Array.isArray(categories) && categories.length > 0) {
-      renderCategoryCards(categories);
-      renderPagination(totalPages, page);
-    } else {
-      renderCategoriesEmptyState();
-      renderPagination(1, 1);
+    if (!isLatestRequest(requestState.filters, requestId)) {
+      return;
     }
+
+    if (currentMode === 'favorites') {
+      return;
+    }
+
+    setFiltersCache(filter, page, FILTERS_LIMIT, data);
+    renderCategoryResponse(data, page);
   } catch (error) {
+    if (!isLatestRequest(requestState.filters, requestId) || isAbortError(error)) {
+      return;
+    }
+
     updateBreadcrumbs(null);
     renderCategoriesEmptyState();
     renderPagination(1, 1);
-    showGlobalNotification(error.message || 'Failed to load categories.', 'error');
+    showGlobalNotification(
+      error.message || 'Failed to load categories.',
+      'error'
+    );
   } finally {
-    setCardsBusy(false);
+    if (isLatestRequest(requestState.filters, requestId)) {
+      setCardsBusy(false);
+    }
   }
 }
 
@@ -474,44 +591,64 @@ export async function loadExercisesByCategory(
 
   currentCategory = categoryName;
   currentPage = page;
-  currentSearchKeyword = keyword;
+  currentSearchKeyword = keyword?.trim() || '';
 
   showSearchField();
-  setCardsBusy(true);
+  cancelRequest(requestState.filters);
 
-  let paramName = 'muscles';
-  if (currentFilter === 'Body parts') {
-    paramName = 'bodypart';
-  } else if (currentFilter === 'Equipment') {
-    paramName = 'equipment';
+  const paramName = FILTER_PARAM_MAP[currentFilter] || 'muscles';
+  const cacheKey = `${paramName}:${categoryName}:${page}:${EXERCISES_LIMIT}:${currentSearchKeyword}`;
+
+  const { controller, requestId } = beginRequest(requestState.exercises);
+  const cached = getExercisesCache(cacheKey);
+
+  if (cached) {
+    renderExercisesResponse(cached, page, categoryName);
+    if (isLatestRequest(requestState.exercises, requestId)) {
+      setCardsBusy(false);
+    }
+    return;
   }
+
+  setCardsBusy(true);
 
   try {
     const data = await getExercises({
       [paramName]: categoryName,
       page,
       limit: EXERCISES_LIMIT,
-      keyword: keyword?.trim() || '',
+      keyword: currentSearchKeyword,
+      signal: controller.signal,
     });
 
-    const exercises = data?.results || [];
-    const totalPages = data?.totalPages || 1;
-
-    updateBreadcrumbs(categoryName);
-
-    if (Array.isArray(exercises) && exercises.length > 0) {
-      renderExerciseCards(exercises);
-      renderPagination(totalPages, page);
-    } else {
-      renderExercisesEmptyState();
-      renderPagination(1, 1);
+    if (!isLatestRequest(requestState.exercises, requestId)) {
+      return;
     }
+
+    if (currentMode === 'favorites') {
+      return;
+    }
+
+    setExercisesCache(cacheKey, data);
+    renderExercisesResponse(data, page, categoryName);
   } catch (error) {
+    if (
+      !isLatestRequest(requestState.exercises, requestId) ||
+      isAbortError(error)
+    ) {
+      return;
+    }
+
     renderExercisesEmptyState();
     renderPagination(1, 1);
-    showGlobalNotification(error.message || 'Failed to load exercises.', 'error');
+    showGlobalNotification(
+      error.message || 'Failed to load exercises.',
+      'error'
+    );
   } finally {
-    setCardsBusy(false);
+    if (isLatestRequest(requestState.exercises, requestId)) {
+      setCardsBusy(false);
+    }
   }
 }
 
@@ -646,6 +783,9 @@ export function switchToFavorites() {
   currentSearchKeyword = '';
 
   hideSearchField();
+  cancelRequest(requestState.filters);
+  cancelRequest(requestState.exercises);
+  setCardsBusy(false);
 
   const contentContainer = getContentContainer();
   if (contentContainer) {

@@ -6,35 +6,41 @@ import {
 } from './form-validation.js';
 import { patchExerciseRating } from '../api.js';
 
+const SCROLL_LOCK_KEY = 'scrollLockCount';
+const modalState = {
+  activeId: null,
+  lastFocusedElement: null,
+  focusableElements: [],
+  handlers: new Map(),
+  keydownAttached: false,
+};
+
 let currentExerciseIdForRating = null;
 let onRatingSuccess = null;
 let listenersAttached = false;
-let lastFocusedElement = null;
-let focusableElements = [];
 
-function getModalElements() {
-  const modal = document.getElementById('js-rating-modal');
-  if (!modal) return null;
+function lockBodyScroll() {
+  const body = document.body;
+  if (!body) return;
 
-  return {
-    modal,
-    overlay: modal.querySelector('.rating-modal__overlay'),
-    closeBtn: document.getElementById('js-rating-modal-close'),
-    serverMessage: document.getElementById('js-rating-server-message'),
-    serverMessageText: document.getElementById('js-rating-server-message-text'),
-    serverMessageClose: document.getElementById('js-rating-server-message-close'),
-    ratingValue: document.getElementById('js-rating-modal-value'),
-    ratingError: document.getElementById('js-rating-error'),
-    form: document.getElementById('js-rating-modal-form'),
-    emailInput: document.getElementById('js-rating-modal-email'),
-    emailError: document.getElementById('js-email-error'),
-    commentTextarea: document.getElementById('js-rating-modal-comment'),
-    commentError: document.getElementById('js-comment-error'),
-    starInputs: Array.from(
-      modal.querySelectorAll('.rating-modal__star-input')
-    ),
-    starLabels: Array.from(modal.querySelectorAll('.rating-modal__star')),
-  };
+  const count = Number(body.dataset[SCROLL_LOCK_KEY] || 0) + 1;
+  body.dataset[SCROLL_LOCK_KEY] = String(count);
+  if (count === 1) {
+    body.style.overflow = 'hidden';
+  }
+}
+
+function unlockBodyScroll() {
+  const body = document.body;
+  if (!body) return;
+
+  const count = Number(body.dataset[SCROLL_LOCK_KEY] || 0) - 1;
+  if (count <= 0) {
+    delete body.dataset[SCROLL_LOCK_KEY];
+    body.style.overflow = '';
+    return;
+  }
+  body.dataset[SCROLL_LOCK_KEY] = String(count);
 }
 
 function getFocusableElements(modal) {
@@ -51,17 +57,14 @@ function getFocusableElements(modal) {
   );
 }
 
-function updateFocusableElements(modal) {
-  focusableElements = getFocusableElements(modal);
-}
-
 function trapFocus(event) {
-  if (event.key !== 'Tab' || focusableElements.length === 0) {
+  if (event.key !== 'Tab' || modalState.focusableElements.length === 0) {
     return;
   }
 
-  const first = focusableElements[0];
-  const last = focusableElements[focusableElements.length - 1];
+  const first = modalState.focusableElements[0];
+  const last =
+    modalState.focusableElements[modalState.focusableElements.length - 1];
 
   if (event.shiftKey && document.activeElement === first) {
     event.preventDefault();
@@ -73,6 +76,152 @@ function trapFocus(event) {
     event.preventDefault();
     first.focus();
   }
+}
+
+function handleModalKeydown(event) {
+  if (!modalState.activeId) {
+    return;
+  }
+
+  if (event.key === 'Escape') {
+    requestModalClose(modalState.activeId);
+    return;
+  }
+
+  trapFocus(event);
+}
+
+function getModalOpenClass(modal) {
+  const baseClass = modal.classList[0];
+  return baseClass ? `${baseClass}--open` : 'is-open';
+}
+
+function requestModalClose(modalId) {
+  const modalHandlers = modalState.handlers.get(modalId);
+  if (modalHandlers?.onClose) {
+    modalHandlers.onClose();
+    return;
+  }
+  closeModal(modalId);
+}
+
+export function openModal(modalId, { onClose } = {}) {
+  const modal = document.getElementById(modalId);
+  if (!modal) return null;
+
+  if (modalState.activeId === modalId) {
+    return modal;
+  }
+
+  if (modalState.activeId && modalState.activeId !== modalId) {
+    requestModalClose(modalState.activeId);
+  }
+
+  const openClass = getModalOpenClass(modal);
+
+  modalState.activeId = modalId;
+  modalState.lastFocusedElement = document.activeElement;
+  modalState.focusableElements = getFocusableElements(modal);
+
+  modal.classList.add(openClass);
+  modal.setAttribute('aria-hidden', 'false');
+  lockBodyScroll();
+
+  if (!modalState.keydownAttached) {
+    document.addEventListener('keydown', handleModalKeydown);
+    modalState.keydownAttached = true;
+  }
+
+  const overlay = modal.querySelector('[class$="__overlay"]');
+  const overlayHandler = event => {
+    if (event.target === event.currentTarget) {
+      requestModalClose(modalId);
+    }
+  };
+  if (overlay) {
+    overlay.addEventListener('click', overlayHandler);
+  }
+
+  modalState.handlers.set(modalId, {
+    overlay,
+    overlayHandler,
+    openClass,
+    onClose,
+  });
+
+  modalState.focusableElements[0]?.focus();
+  return modal;
+}
+
+export function closeModal(modalId, options = {}) {
+  const modal = document.getElementById(modalId);
+  if (!modal) return null;
+
+  const { restoreFocus = true, preserveScroll = false } = options;
+  const modalHandlers = modalState.handlers.get(modalId);
+  const openClass =
+    modalHandlers?.openClass || getModalOpenClass(modal);
+
+  modal.classList.remove(openClass);
+  modal.setAttribute('aria-hidden', 'true');
+
+  if (modalHandlers?.overlay && modalHandlers?.overlayHandler) {
+    modalHandlers.overlay.removeEventListener(
+      'click',
+      modalHandlers.overlayHandler
+    );
+  }
+  modalState.handlers.delete(modalId);
+
+  if (!preserveScroll) {
+    unlockBodyScroll();
+  }
+
+  if (
+    restoreFocus &&
+    modalState.lastFocusedElement &&
+    typeof modalState.lastFocusedElement.focus === 'function' &&
+    document.contains(modalState.lastFocusedElement)
+  ) {
+    modalState.lastFocusedElement.focus();
+  }
+
+  if (modalState.activeId === modalId) {
+    modalState.activeId = null;
+    modalState.focusableElements = [];
+    modalState.lastFocusedElement = null;
+  }
+
+  if (!modalState.activeId && modalState.keydownAttached) {
+    document.removeEventListener('keydown', handleModalKeydown);
+    modalState.keydownAttached = false;
+  }
+
+  return modal;
+}
+
+function getModalElements() {
+  const modal = document.getElementById('js-rating-modal');
+  if (!modal) return null;
+
+  return {
+    modal,
+    closeBtn: document.getElementById('js-rating-modal-close'),
+    serverMessage: document.getElementById('js-rating-server-message'),
+    serverMessageText: document.getElementById('js-rating-server-message-text'),
+    serverMessageClose: document.getElementById('js-rating-server-message-close'),
+    ratingValue: document.getElementById('js-rating-modal-value'),
+    ratingError: document.getElementById('js-rating-error'),
+    form: document.getElementById('js-rating-modal-form'),
+    emailInput: document.getElementById('js-rating-modal-email'),
+    emailError: document.getElementById('js-email-error'),
+    commentTextarea: document.getElementById('js-rating-modal-comment'),
+    commentError: document.getElementById('js-comment-error'),
+    starInputs: Array.from(
+      modal.querySelectorAll('.rating-modal__star-input')
+    ),
+    starLabels: Array.from(modal.querySelectorAll('.rating-modal__star')),
+  };
 }
 
 function showServerMessage(message, type = 'error') {
@@ -158,21 +307,6 @@ function resetRatingForm() {
 
 function handleClose() {
   closeRatingModal();
-}
-
-function handleOverlayClick(event) {
-  if (event.target === event.currentTarget) {
-    closeRatingModal();
-  }
-}
-
-function handleKeydown(event) {
-  if (event.key === 'Escape') {
-    closeRatingModal();
-    return;
-  }
-
-  trapFocus(event);
 }
 
 function handleStarChange(event) {
@@ -300,7 +434,6 @@ function attachListeners() {
   if (!elements) return;
 
   elements.closeBtn?.addEventListener('click', handleClose);
-  elements.overlay?.addEventListener('click', handleOverlayClick);
   elements.serverMessageClose?.addEventListener(
     'click',
     handleServerMessageClose
@@ -315,7 +448,6 @@ function attachListeners() {
     label.addEventListener('mouseenter', handleStarHover);
     label.addEventListener('mouseleave', handleStarLeave);
   });
-  document.addEventListener('keydown', handleKeydown);
 
   listenersAttached = true;
 }
@@ -326,7 +458,6 @@ function detachListeners() {
   if (!elements) return;
 
   elements.closeBtn?.removeEventListener('click', handleClose);
-  elements.overlay?.removeEventListener('click', handleOverlayClick);
   elements.serverMessageClose?.removeEventListener(
     'click',
     handleServerMessageClose
@@ -341,7 +472,6 @@ function detachListeners() {
     label.removeEventListener('mouseenter', handleStarHover);
     label.removeEventListener('mouseleave', handleStarLeave);
   });
-  document.removeEventListener('keydown', handleKeydown);
 
   listenersAttached = false;
 }
@@ -352,17 +482,10 @@ export function openRatingModal(exerciseId, options = {}) {
 
   currentExerciseIdForRating = exerciseId;
   onRatingSuccess = options.onSuccess || null;
-  lastFocusedElement = document.activeElement;
 
   resetRatingForm();
   attachListeners();
-
-  elements.modal.classList.add('rating-modal--open');
-  elements.modal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-
-  updateFocusableElements(elements.modal);
-  focusableElements[0]?.focus();
+  openModal('js-rating-modal', { onClose: closeRatingModal });
 }
 
 function closeRatingModal() {
@@ -370,21 +493,9 @@ function closeRatingModal() {
   if (!elements) return;
 
   detachListeners();
-
-  elements.modal.classList.remove('rating-modal--open');
-  elements.modal.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
+  closeModal('js-rating-modal');
   currentExerciseIdForRating = null;
   onRatingSuccess = null;
-
-  if (
-    lastFocusedElement &&
-    typeof lastFocusedElement.focus === 'function' &&
-    document.contains(lastFocusedElement)
-  ) {
-    lastFocusedElement.focus();
-  }
-  lastFocusedElement = null;
 }
 
 export { closeRatingModal };
