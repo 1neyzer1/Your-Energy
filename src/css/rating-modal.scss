@@ -33,6 +33,19 @@
     z-index: 2001;
     padding: var(--spacing-xl);
     padding-top: calc(var(--spacing-xl) + 44px + var(--spacing-lg));
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: var(--spacing-lg);
+      left: var(--spacing-lg);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      pointer-events: none;
+    }
   }
 
   &__close {
@@ -65,6 +78,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
+    position: relative;
+    z-index: 1;
   }
 
   &__title {

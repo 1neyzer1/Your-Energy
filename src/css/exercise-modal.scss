@@ -28,21 +28,23 @@
     position: relative;
     background-color: rgba(36, 36, 36, 0.95);
     border-radius: 20px;
-    max-width: 900px;
+    max-width: 708px;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
     z-index: 1001;
-    padding: var(--spacing-xl);
-    padding-top: calc(var(--spacing-xl) + 44px + var(--spacing-lg));
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+
   }
 
   &__close {
     position: absolute;
-    top: var(--spacing-lg);
-    right: var(--spacing-lg);
-    width: 44px;
-    height: 44px;
+    top: 24px;
+    right: 24px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -58,8 +60,8 @@
     }
 
     svg {
-      width: 24px;
-      height: 24px;
+      width: 12px;
+      height: 12px;
     }
   }
 
@@ -67,22 +69,48 @@
     display: flex;
     gap: var(--spacing-xl);
     flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
 
-    @media (min-width: 768px) {
+    @media (min-width: 748px) {
       flex-direction: row;
+    }
+
+    @media (min-width: 1440px) {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      column-gap: 32px;
+      align-items: start;
+      flex: 1;
     }
   }
 
   &__image {
-    flex: 1;
-    border-radius: 20px;
+    width: 100%;
+    border-radius: 12px;
     overflow: hidden;
-    background-color: var(--color-block-light);
-    min-height: 300px;
+    background-color: #d0d0d0;
+    min-height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 1;
+    aspect-ratio: 4 / 3;
+
+    @media (min-width: 748px) {
+      flex: 0 0 240px;
+      width: 240px;
+      height: 220px;
+      min-height: auto;
+      aspect-ratio: auto;
+    }
+
+    @media (min-width: 1440px) {
+      flex: 0 0 270px;
+      width: 270px;
+      height: 259px;
+      align-self: start;
+    }
 
     img {
       width: 100%;
@@ -110,13 +138,18 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
+    min-width: 0;
     color: var(--color-light);
+
+    @media (min-width: 1440px) {
+      height: 100%;
+    }
   }
 
   &__title {
     font-family: var(--font-family);
-    font-size: 32px;
+    font-size: 20px;
     font-weight: 500;
     color: var(--color-light);
     margin: 0;
@@ -131,9 +164,9 @@
 
   &__rating-value {
     font-family: var(--font-family);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
-    color: var(--color-light);
+    color: rgba(255, 255, 255, 0.7);
   }
 
   &__rating-stars {
@@ -142,8 +175,8 @@
   }
 
   &__rating-star {
-    width: 18px;
-    height: 18px;
+    width: 12px;
+    height: 12px;
 
     &--filled {
       fill: #EEA10C;
@@ -158,11 +191,18 @@
 
   &__details {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-md);
-    margin: var(--spacing-sm) 0 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 24px;
+    row-gap: var(--spacing-sm);
+    margin: 12px 0 0;
     list-style: none;
     padding: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 12px;
+
+    @media (min-width: 1440px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
 
   &__detail-item {
@@ -181,21 +221,35 @@
   &__detail-value {
     font-family: var(--font-family);
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
     color: var(--color-light);
     text-transform: capitalize;
+    min-width: 0;
   }
 
   &__calories {
     display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 12px;
+  }
+
+  &__calories-label {
+    font-family: var(--font-family);
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  &__calories-values {
+    display: flex;
     align-items: baseline;
     gap: 4px;
-    margin-top: var(--spacing-sm);
   }
 
   &__calories-value {
     font-family: var(--font-family);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     color: var(--color-light);
   }
@@ -209,29 +263,37 @@
 
   &__description {
     font-family: var(--font-family);
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.6;
-    margin: var(--spacing-sm) 0;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.4;
+    margin: 12px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 12px;
   }
 
   &__actions {
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-lg);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: auto;
 
-    @media (min-width: 768px) {
-      flex-direction: row;
+    @media (min-width: 748px) {
+      justify-content: flex-start;
+    }
+
+    @media (min-width: 1440px) {
+      flex-wrap: nowrap;
     }
   }
 
   &__btn {
     font-family: var(--font-family);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
-    padding: var(--spacing-md) var(--spacing-xl);
+    padding: 12px;
+    min-height: 48px;
     border-radius: 30px;
     border: none;
     cursor: pointer;
@@ -239,12 +301,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-sm);
+    gap: 8px;
+    white-space: nowrap;
+    flex: 0 0 auto;
 
     &--favorites {
       background-color: var(--color-block-light);
       color: var(--color-dark);
       border: 1px solid var(--color-dark);
+      white-space: nowrap;
 
       &:hover {
         background-color: var(--color-dark);
@@ -252,8 +317,8 @@
       }
 
       svg {
-        width: 24px;
-        height: 24px;
+        width: 16px;
+        height: 16px;
       }
 
       &.active {
@@ -265,14 +330,25 @@
     }
 
     &--rating {
-      background-color: var(--color-dark);
+      background-color: transparent;
       color: var(--color-light);
-      border: 1px solid var(--color-light);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      white-space: nowrap;
 
       &:hover {
-        background-color: var(--color-light);
-        color: var(--color-dark);
+        background-color: rgba(255, 255, 255, 0.1);
       }
+    }
+  }
+
+  @media (min-width: 1440px) {
+    &__content {
+      height: 486px;
+      padding: 32px;
+    }
+
+    &__actions {
+      padding-bottom: 0;
     }
   }
 }

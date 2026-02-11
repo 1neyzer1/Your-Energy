@@ -1,8 +1,12 @@
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-lg) 0;
+  padding: var(--spacing-md) 0;
+
+  &__container {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
 
   &__logo {
     display: inline-flex;
@@ -10,7 +14,7 @@
     background-color: var(--color-block-light);
     text-decoration: none;
 
-    img {
+    svg {
       display: block;
       width: 132px;
       height: 24px;
@@ -18,14 +22,15 @@
   }
 
   &__nav {
+    display: none;
     width: 265px;
-    display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--color-dark);
     height: 52px;
     padding: var(--spacing-sm);
     border-radius: 30px;
+    justify-self: center;
 
     &-list {
       display: flex;
@@ -67,16 +72,17 @@
   }
 
   &__socials {
-    display: flex;
-    gap: 12px;
+    display: none;
+    gap: 13px;
     list-style: none;
     margin: 0;
     padding: 0;
+    justify-self: end;
 
     /* Header social (light background) */
     &-link {
-      width: 44px;
-      height: 44px;
+      width: 43px;
+      height: 43px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -86,15 +92,15 @@
       padding: 0;
 
       svg {
-        width: 44px;
-        height: 44px;
+        width: 43px;
+        height: 43px;
         display: block;
       }
     }
   }
 
   &__burger {
-    display: none;
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 32px;
@@ -115,20 +121,19 @@
     }
   }
 
-  // Mobile styles
-  @media (max-width: 767px) {
-    padding: var(--spacing-md) 0;
+  @media (min-width: 748px) {
+    padding: var(--spacing-lg) 0;
 
     &__nav {
-      display: none;
+      display: flex;
     }
 
     &__socials {
-      display: none;
+      display: flex;
     }
 
     &__burger {
-      display: flex;
+      display: none;
     }
   }
 }
@@ -143,10 +148,10 @@
   background-color: var(--color-dark);
   z-index: 1000;
   transition: right 0.3s ease;
-  display: none;
+  display: block;
 
-  @media (max-width: 767px) {
-    display: block;
+  @media (min-width: 748px) {
+    display: none;
   }
 
   &.is-open {
@@ -221,7 +226,7 @@
 
   &__socials {
     display: flex;
-    gap: 12px;
+    gap: 13px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -231,16 +236,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 44px;
-      height: 44px;
+      width: 43px;
+      height: 43px;
       color: #f4f4f4;
       background: transparent;
       border: none;
       padding: 0;
       
       svg {
-        width: 44px;
-        height: 44px;
+        width: 43px;
+        height: 43px;
         display: block;
       }
     }

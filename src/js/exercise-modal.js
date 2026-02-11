@@ -58,6 +58,7 @@ function handleRatingClick() {
   closeExerciseModal({ restoreFocus: false });
   openRatingModal(exerciseId, {
     onSuccess: () => openExerciseModal(exerciseId),
+    onClose: () => openExerciseModal(exerciseId),
   });
 }
 

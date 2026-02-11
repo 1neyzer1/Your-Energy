@@ -17,6 +17,7 @@ const modalState = {
 
 let currentExerciseIdForRating = null;
 let onRatingSuccess = null;
+let onRatingClose = null;
 let listenersAttached = false;
 
 function lockBodyScroll() {
@@ -305,8 +306,19 @@ function resetRatingForm() {
   hideServerMessage();
 }
 
+function requestRatingClose() {
+  const exerciseId = currentExerciseIdForRating;
+  const hasCloseCallback = typeof onRatingClose === 'function';
+
+  closeRatingModal({ restoreFocus: !hasCloseCallback });
+
+  if (hasCloseCallback && exerciseId) {
+    onRatingClose(exerciseId);
+  }
+}
+
 function handleClose() {
-  closeRatingModal();
+  requestRatingClose();
 }
 
 function handleStarChange(event) {
@@ -411,7 +423,7 @@ async function handleFormSubmit(event) {
     const exerciseId = currentExerciseIdForRating;
     const successCallback = onRatingSuccess;
 
-    closeRatingModal();
+    closeRatingModal({ restoreFocus: !successCallback });
 
     showGlobalNotification(
       `Thank you, your review for exercise ${exerciseName} has been submitted`,
@@ -482,20 +494,22 @@ export function openRatingModal(exerciseId, options = {}) {
 
   currentExerciseIdForRating = exerciseId;
   onRatingSuccess = options.onSuccess || null;
+  onRatingClose = options.onClose || null;
 
   resetRatingForm();
   attachListeners();
-  openModal('js-rating-modal', { onClose: closeRatingModal });
+  openModal('js-rating-modal', { onClose: requestRatingClose });
 }
 
-function closeRatingModal() {
+function closeRatingModal(options = {}) {
   const elements = getModalElements();
   if (!elements) return;
 
   detachListeners();
-  closeModal('js-rating-modal');
+  closeModal('js-rating-modal', options);
   currentExerciseIdForRating = null;
   onRatingSuccess = null;
+  onRatingClose = null;
 }
 
 export { closeRatingModal };

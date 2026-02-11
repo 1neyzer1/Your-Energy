@@ -13,11 +13,17 @@ video {
 
 body {
   width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-xl);
+  margin: 0;
+  padding: 0;
   background-color: var(--color-light);
   font-family: var(--font-family);
+}
+
+.container {
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .visually-hidden {
@@ -35,15 +41,17 @@ body {
   display: none;
 }
 
-@media (max-width: 1279px) {
-  body {
-    padding: 0 var(--spacing-lg);
+@media (min-width: 748px) {
+  .container {
+    max-width: 765px;
+    padding: 0 52px;
   }
 }
 
-@media (max-width: 767px) {
-  body {
-    padding: 0 var(--spacing-md);
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1440px;
+    padding: 0 32px;
   }
 }
 

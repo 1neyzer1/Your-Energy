@@ -1,14 +1,18 @@
 .footer {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-areas: "brand message subscribe";
-  gap: var(--spacing-2xl);
   background-color: var(--color-dark);
   color: var(--color-light);
-  padding: var(--spacing-3xl) var(--spacing-xl) var(--spacing-lg) var(--spacing-xl);
-  margin-left: calc(-1 * var(--spacing-xl));
-  margin-right: calc(-1 * var(--spacing-xl));
+  padding: var(--spacing-2xl) 0;
   font-family: var(--font-family);
+
+  &__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "brand"
+      "message"
+      "subscribe";
+    gap: var(--spacing-2xl);
+  }
 
   &__brand {
     grid-area: brand;
@@ -20,19 +24,24 @@
   &__brand-logo {
     display: inline-flex;
     align-items: center;
+    color: var(--color-light);
     text-decoration: none;
-    img {
+    svg {
       display: block;
       max-width: 100%;
       height: 24px;
       width: 132px;
       object-fit: contain;
     }
+
+    svg path {
+      fill: currentColor;
+    }
   }
 
   &__socials {
     display: flex;
-    gap: 12px;
+    gap: 13px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -40,8 +49,8 @@
 
   /* Footer social (dark background) */
   &__socials-link {
-    width: 44px;
-    height: 44px;
+    width: 43px;
+    height: 43px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -51,8 +60,8 @@
     padding: 0;
 
     svg {
-      width: 44px;
-      height: 44px;
+      width: 43px;
+      height: 43px;
       display: block;
     }
   }
@@ -69,12 +78,12 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--spacing-xl);
   }
 
   &__message-text {
-    font-size: 56px;
+    font-size: 32px;
     font-weight: 400;
     color: var(--color-light);
     margin: 0;
@@ -123,6 +132,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
+    width: 100%;
+    justify-self: stretch;
   
     &-title {
       font-size: 15px;
@@ -144,10 +155,11 @@
   
       &-input {
         width: 100%;
-        padding: var(--spacing-md);
+        height: 47px;
+        padding: 0 16px;
         background-color: transparent;
         border: 1px solid var(--color-light);
-        border-radius: 30px;
+        border-radius: 23.5px;
         color: var(--color-light);
         transition: border-color 0.2s ease;
         outline: none;
@@ -171,11 +183,12 @@
   
       &-button {
         width: 100%;
-        padding: var(--spacing-md) var(--spacing-xl);
+        height: 48px;
+        padding: 0 16px;
         background-color: var(--color-block-light);
         color: var(--color-dark);
         border: none;
-        border-radius: 30px;
+        border-radius: 24px;
         font-size: 16px;
         cursor: pointer;
         transition: background-color 0.2s ease;
@@ -195,43 +208,46 @@
   }
 }
 
-@media (max-width: 1279px) {
+@media (min-width: 748px) {
   .footer {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-areas:
-      "brand subscribe"
-      "message message";
-    padding: var(--spacing-3xl) var(--spacing-lg) var(--spacing-lg);
-    margin-left: calc(-1 * var(--spacing-lg));
-    margin-right: calc(-1 * var(--spacing-lg));
+    padding: var(--spacing-3xl) 0 var(--spacing-lg);
 
-    &__message {
-      align-items: flex-start;
+    &__container {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-areas:
+        "brand subscribe"
+        "message message";
     }
 
     &__message-text {
       font-size: 40px;
     }
+
+    &__subscribe {
+      width: 100%;
+      justify-self: stretch;
+    }
   }
 }
 
-@media (max-width: 767px) {
+@media (min-width: 1440px) {
   .footer {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "brand"
-      "message"
-      "subscribe";
-    padding: var(--spacing-2xl) var(--spacing-md);
-    margin-left: calc(-1 * var(--spacing-md));
-    margin-right: calc(-1 * var(--spacing-md));
+    &__container {
+      grid-template-columns: 1fr 2fr 1fr;
+      grid-template-areas: "brand message subscribe";
+    }
 
     &__message {
-      align-items: flex-start;
+      align-items: center;
     }
 
     &__message-text {
-      font-size: 32px;
+      font-size: 56px;
+    }
+
+    &__subscribe {
+      width: 352px;
+      justify-self: end;
     }
   }
 }

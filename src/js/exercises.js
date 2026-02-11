@@ -9,8 +9,7 @@ let currentCategory = null;
 let currentSearchKeyword = '';
 let currentMode = 'home';
 
-const FILTERS_LIMIT = 12;
-const EXERCISES_LIMIT = 8;
+const TABLET_MIN_WIDTH = 748;
 const FILTER_PARAM_MAP = {
   Muscles: 'muscles',
   'Body parts': 'bodypart',
@@ -61,6 +60,18 @@ function isLatestRequest(state, requestId) {
 
 function isAbortError(error) {
   return error?.name === 'AbortError';
+}
+
+function isTabletViewport() {
+  return window.matchMedia(`(min-width: ${TABLET_MIN_WIDTH}px)`).matches;
+}
+
+function getFiltersLimit() {
+  return isTabletViewport() ? 12 : 9;
+}
+
+function getExercisesLimit() {
+  return isTabletViewport() ? 10 : 8;
 }
 
 function getFiltersCache(filter, page, limit) {
@@ -523,6 +534,7 @@ export async function loadExerciseCards(filter, page = 1) {
     return;
   }
 
+  const filtersLimit = getFiltersLimit();
   setActiveFilter(filter);
   currentPage = page;
   currentCategory = null;
@@ -532,7 +544,7 @@ export async function loadExerciseCards(filter, page = 1) {
   cancelRequest(requestState.exercises);
 
   const { controller, requestId } = beginRequest(requestState.filters);
-  const cached = getFiltersCache(filter, page, FILTERS_LIMIT);
+  const cached = getFiltersCache(filter, page, filtersLimit);
 
   if (cached) {
     renderCategoryResponse(cached, page);
@@ -548,7 +560,7 @@ export async function loadExerciseCards(filter, page = 1) {
     const data = await getFilters({
       filter,
       page,
-      limit: FILTERS_LIMIT,
+      limit: filtersLimit,
       signal: controller.signal,
     });
 
@@ -560,7 +572,7 @@ export async function loadExerciseCards(filter, page = 1) {
       return;
     }
 
-    setFiltersCache(filter, page, FILTERS_LIMIT, data);
+    setFiltersCache(filter, page, filtersLimit, data);
     renderCategoryResponse(data, page);
   } catch (error) {
     if (!isLatestRequest(requestState.filters, requestId) || isAbortError(error)) {
@@ -590,6 +602,7 @@ export async function loadExercisesByCategory(
     return;
   }
 
+  const exercisesLimit = getExercisesLimit();
   currentCategory = categoryName;
   currentPage = page;
   currentSearchKeyword = keyword?.trim() || '';
@@ -598,7 +611,7 @@ export async function loadExercisesByCategory(
   cancelRequest(requestState.filters);
 
   const paramName = FILTER_PARAM_MAP[currentFilter] || 'muscles';
-  const cacheKey = `${paramName}:${categoryName}:${page}:${EXERCISES_LIMIT}:${currentSearchKeyword}`;
+  const cacheKey = `${paramName}:${categoryName}:${page}:${exercisesLimit}:${currentSearchKeyword}`;
 
   const { controller, requestId } = beginRequest(requestState.exercises);
   const cached = getExercisesCache(cacheKey);
@@ -617,7 +630,7 @@ export async function loadExercisesByCategory(
     const data = await getExercises({
       [paramName]: categoryName,
       page,
-      limit: EXERCISES_LIMIT,
+      limit: exercisesLimit,
       keyword: currentSearchKeyword,
       signal: controller.signal,
     });

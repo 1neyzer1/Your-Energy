@@ -1,120 +1,122 @@
 <section class="exercises__content" aria-labelledby="js-exercises-heading">
-  <h2 class="visually-hidden" id="js-exercises-heading">Exercises</h2>
-  <header class="exercises__content__header">
-    <div class="exercises__content__header-top">
-      <nav class="exercises__content__header-breadcrumbs-nav" aria-label="Breadcrumb">
-        <ol class="exercises__content__header-breadcrumbs" id="js-exercises-breadcrumbs">
-          <li class="exercises__content__header-breadcrumbs-entry">
-            <span
-              class="exercises__content__header-title exercises__content__header-breadcrumbs-current"
-              aria-current="page">Exercises</span>
-          </li>
-        </ol>
-      </nav>
-      <div class="exercises__content__header-controls">
-        <form
-          class="exercises__content__header-search exercises__content__header-search--hidden"
-          id="js-exercises-search"
-          role="search">
-          <input type="search" class="exercises__content__header-search-input" id="js-exercises-search-input"
-            placeholder="Search..." aria-label="Search exercises">
-          <button class="exercises__content__header-search-submit" type="submit" aria-label="Search">
-            <svg class="exercises__content__header-search-icon" width="20" height="20" viewBox="0 0 18 18" fill="none"
-              xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-              <path
-                d="M8.25 14.25C11.5637 14.25 14.25 11.5637 14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25Z"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-              <path d="M15.75 15.75L12.4875 12.4875" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round"></path>
-            </svg>
-          </button>
-        </form>
-        <ul class="exercises__content__header-filters" aria-label="Exercise filters">
-          <li class="exercises__content__header-filters-option">
-            <button
-              class="exercises__content__header-filters-item exercises__content__header-filters-item--active"
-              data-filter="Muscles"
-              type="button"
-              aria-pressed="true">Muscles</button>
-          </li>
-          <li class="exercises__content__header-filters-option">
-            <button
-              class="exercises__content__header-filters-item"
-              data-filter="Body parts"
-              type="button"
-              aria-pressed="false">Body parts</button>
-          </li>
-          <li class="exercises__content__header-filters-option">
-            <button
-              class="exercises__content__header-filters-item"
-              data-filter="Equipment"
-              type="button"
-              aria-pressed="false">Equipment</button>
-          </li>
+  <div class="container">
+    <h2 class="visually-hidden" id="js-exercises-heading">Exercises</h2>
+    <header class="exercises__content__header">
+      <div class="exercises__content__header-top">
+        <nav class="exercises__content__header-breadcrumbs-nav" aria-label="Breadcrumb">
+          <ol class="exercises__content__header-breadcrumbs" id="js-exercises-breadcrumbs">
+            <li class="exercises__content__header-breadcrumbs-entry">
+              <span
+                class="exercises__content__header-title exercises__content__header-breadcrumbs-current"
+                aria-current="page">Exercises</span>
+            </li>
+          </ol>
+        </nav>
+        <div class="exercises__content__header-controls">
+          <form
+            class="exercises__content__header-search exercises__content__header-search--hidden"
+            id="js-exercises-search"
+            role="search">
+            <input type="search" class="exercises__content__header-search-input" id="js-exercises-search-input"
+              placeholder="Search..." aria-label="Search exercises">
+            <button class="exercises__content__header-search-submit" type="submit" aria-label="Search">
+              <svg class="exercises__content__header-search-icon" width="20" height="20" viewBox="0 0 18 18" fill="none"
+                xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <path
+                  d="M8.25 14.25C11.5637 14.25 14.25 11.5637 14.25 8.25C14.25 4.93629 11.5637 2.25 8.25 2.25C4.93629 2.25 2.25 4.93629 2.25 8.25C2.25 11.5637 4.93629 14.25 8.25 14.25Z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M15.75 15.75L12.4875 12.4875" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </svg>
+            </button>
+          </form>
+          <ul class="exercises__content__header-filters" aria-label="Exercise filters">
+            <li class="exercises__content__header-filters-option">
+              <button
+                class="exercises__content__header-filters-item exercises__content__header-filters-item--active"
+                data-filter="Muscles"
+                type="button"
+                aria-pressed="true">Muscles</button>
+            </li>
+            <li class="exercises__content__header-filters-option">
+              <button
+                class="exercises__content__header-filters-item"
+                data-filter="Body parts"
+                type="button"
+                aria-pressed="false">Body parts</button>
+            </li>
+            <li class="exercises__content__header-filters-option">
+              <button
+                class="exercises__content__header-filters-item"
+                data-filter="Equipment"
+                type="button"
+                aria-pressed="false">Equipment</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="exercises__content__main">
+      <aside class="exercises__content__main__aside">
+        <div class="exercises__content__main__aside__quote">
+          <img src="./images/svg/runner-icon-light.svg" alt="" width="32" height="32" loading="lazy" decoding="async" aria-hidden="true">
+          <div class="exercises__content__main__aside__quote-content">
+            <div class="exercises__content__main__aside__quote-title">
+              <span class="exercises__content__main__aside__quote-title-text">Quote of the day</span>
+              <img src="./images/svg/quote-icon.svg" alt="" width="24" height="24" loading="lazy" decoding="async" aria-hidden="true">
+            </div>
+            <p class="exercises__content__main__aside__quote-text" id="js-exercises-quote-text" aria-live="polite"></p>
+            <div class="exercises__content__main__aside__quote-author" id="js-exercises-quote-author" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <div class="exercises__content__main__aside__info">
+          <picture>
+            <source
+              type="image/webp"
+              srcset="./images/webp/exercises-aside-480.webp 1x, ./images/webp/exercises-aside-960.webp 2x"
+            >
+            <img
+              src="./images/exercises-aside-480.jpg"
+              srcset="./images/exercises-aside-480.jpg 1x, ./images/exercises-aside-960.jpg 2x"
+              width="480"
+              height="320"
+              alt="Exercise image"
+              loading="lazy"
+              decoding="async"
+              class="exercises__content__main__aside__image"
+            >
+          </picture>
+
+          <div class="exercises__content__main__aside__norm">
+            <img src="./images/svg/norm-icon.svg" alt="" width="32" height="32" loading="lazy" decoding="async" aria-hidden="true">
+            <div class="exercises__content__main__aside__norm-context">
+              <span class="exercises__content__main__aside__norm-context-title">110 min</span><br>
+              <span class="exercises__content__main__aside__norm-context-subtitle">Daily norm of sports</span>
+              <p class="exercises__content__main__aside__norm-context-text">
+                The World Health Organization recommends at least 150 minutes of moderate-intensity aerobic physical
+                activity throughout
+                the week for adults aged 18-64. However, what happens if we adjust that number to 110 minutes every day?
+                While it might
+                seem like a high number to hit, dedicating 110 minutes daily to sporting activities may offer unparalleled
+                benefits to
+                physical health, mental well-being, and overall quality of life.
+              </p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="exercises__content__main__cards-container">
+        <ul
+          class="exercises__content__main__cards exercise-cards"
+          id="js-exercises-cards"
+          aria-live="polite"
+          aria-busy="false">
         </ul>
+        <div class="exercises__content__pagination"></div>
       </div>
-    </div>
-  </header>
-
-  <div class="exercises__content__main">
-    <aside class="exercises__content__main__aside">
-      <div class="exercises__content__main__aside__quote">
-        <img src="./images/svg/runner-icon-light.svg" alt="" width="32" height="32" loading="lazy" decoding="async" aria-hidden="true">
-        <div class="exercises__content__main__aside__quote-content">
-          <div class="exercises__content__main__aside__quote-title">
-            <span class="exercises__content__main__aside__quote-title-text">Quote of the day</span>
-            <img src="./images/svg/quote-icon.svg" alt="" width="24" height="24" loading="lazy" decoding="async" aria-hidden="true">
-          </div>
-          <p class="exercises__content__main__aside__quote-text" id="js-exercises-quote-text" aria-live="polite"></p>
-          <div class="exercises__content__main__aside__quote-author" id="js-exercises-quote-author" aria-live="polite"></div>
-        </div>
-      </div>
-
-      <div class="exercises__content__main__aside__info">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="./images/webp/exercises-aside-480.webp 1x, ./images/webp/exercises-aside-960.webp 2x"
-          >
-          <img
-            src="./images/exercises-aside-480.jpg"
-            srcset="./images/exercises-aside-480.jpg 1x, ./images/exercises-aside-960.jpg 2x"
-            width="480"
-            height="320"
-            alt="Exercise image"
-            loading="lazy"
-            decoding="async"
-            class="exercises__content__main__aside__image"
-          >
-        </picture>
-
-        <div class="exercises__content__main__aside__norm">
-          <img src="./images/svg/norm-icon.svg" alt="" width="32" height="32" loading="lazy" decoding="async" aria-hidden="true">
-          <div class="exercises__content__main__aside__norm-context">
-            <span class="exercises__content__main__aside__norm-context-title">110 min</span><br>
-            <span class="exercises__content__main__aside__norm-context-subtitle">Daily norm of sports</span>
-            <p class="exercises__content__main__aside__norm-context-text">
-              The World Health Organization recommends at least 150 minutes of moderate-intensity aerobic physical
-              activity throughout
-              the week for adults aged 18-64. However, what happens if we adjust that number to 110 minutes every day?
-              While it might
-              seem like a high number to hit, dedicating 110 minutes daily to sporting activities may offer unparalleled
-              benefits to
-              physical health, mental well-being, and overall quality of life.
-            </p>
-          </div>
-        </div>
-      </div>
-    </aside>
-
-    <div class="exercises__content__main__cards-container">
-      <ul
-        class="exercises__content__main__cards exercise-cards"
-        id="js-exercises-cards"
-        aria-live="polite"
-        aria-busy="false">
-      </ul>
-      <div class="exercises__content__pagination"></div>
     </div>
   </div>
 </section>
