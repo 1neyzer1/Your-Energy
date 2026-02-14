@@ -41,6 +41,44 @@ body {
   display: none;
 }
 
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.is-open {
+  display: flex;
+}
+
+.modal-backdrop,
+.modal__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-overlay);
+  padding: var(--space-500);
+  overflow-y: auto;
+}
+
+.modal-backdrop.is-open,
+.modal__backdrop.is-open,
+.modal-backdrop.exercise-modal--open,
+.modal-backdrop.rating-modal--open,
+.modal__backdrop.exercise-modal--open,
+.modal__backdrop.rating-modal--open {
+  display: flex;
+}
+
+.modal-open {
+  overflow: hidden;
+}
+
 @media (min-width: 748px) {
   .container {
     max-width: 765px;

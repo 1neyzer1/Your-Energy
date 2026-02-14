@@ -11,10 +11,11 @@
   &__logo {
     display: inline-flex;
     align-items: center;
-    background-color: var(--color-block-light);
+    background-color: transparent;
     text-decoration: none;
 
-    svg {
+    svg,
+    img {
       display: block;
       width: 132px;
       height: 24px;
@@ -110,14 +111,23 @@
     cursor: pointer;
     padding: 0;
     z-index: 1001;
+    grid-column: 3;
+    justify-self: end;
 
+    &::before,
+    &::after,
     span {
+      content: '';
       display: block;
       width: 100%;
-      height: 3px;
+      height: 2px;
       background-color: var(--color-dark);
       border-radius: 2px;
       transition: all 0.3s ease;
+    }
+
+    span:last-child {
+      display: none;
     }
   }
 
@@ -163,12 +173,15 @@
     flex-direction: column;
     height: 100%;
     padding: var(--spacing-xl) var(--spacing-lg);
+    align-items: center;
   }
 
   &__close {
     position: absolute;
     top: 20px;
     right: 20px;
+    left: auto;
+    margin-left: auto;
     background: none;
     border: none;
     color: var(--color-light);
@@ -187,6 +200,8 @@
     gap: var(--spacing-md);
     margin-top: 60px;
     margin-bottom: auto;
+    align-items: center;
+    width: 100%;
 
     &-list {
       display: flex;
@@ -195,6 +210,7 @@
       list-style: none;
       margin: 0;
       padding: 0;
+      align-items: center;
     }
 
     &-item {
@@ -211,7 +227,7 @@
       border: none;
       cursor: pointer;
       font-family: var(--font-family);
-      text-align: left;
+      text-align: center;
       transition: opacity 0.2s ease;
 
       &:hover {
@@ -231,6 +247,7 @@
     margin: 0;
     padding: 0;
     margin-top: auto;
+    justify-content: center;
 
     &-link {
       display: flex;

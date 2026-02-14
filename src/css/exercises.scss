@@ -8,6 +8,99 @@
     .exercises__content__header-search {
       display: none;
     }
+
+    .exercises__content__main__aside__quote {
+      min-height: 206px;
+    }
+
+    .exercises__content__main__aside {
+      order: 0;
+    }
+
+    .exercises__content__main__cards-container {
+      order: 1;
+    }
+
+    .exercises__content__main__aside__info {
+      flex-direction: column-reverse;
+      align-items: stretch;
+      gap: 16px;
+    }
+
+    .exercises__content__main__aside__image {
+      width: 100%;
+      height: 119px;
+    }
+
+    .exercises__content__main__aside__norm {
+      width: 100%;
+      min-height: 119px;
+      max-height: 119px;
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .exercises__content__main__aside__norm-context-text {
+      display: none;
+    }
+
+    .exercises__content__main__cards,
+    .exercise-cards {
+      gap: 16px;
+    }
+
+    .exercises__content__main__cards-item--exercise,
+    .exercise-card--exercise {
+      min-height: 141px;
+      padding: 16px;
+    }
+
+    .exercises__content__main__cards-item-remove,
+    .exercise-card__remove {
+      top: 12px;
+      right: auto;
+      left: 97px;
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+
+      &:hover {
+        background-color: transparent;
+        color: var(--color-dark);
+      }
+    }
+
+    .exercises__content__main__cards-item-header,
+    .exercise-card__header {
+      margin-bottom: 12px;
+    }
+
+    .exercises__content__main__cards-item-body,
+    .exercise-card__body {
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .exercises__content__main__cards-item-icon,
+    .exercise-card__icon {
+      width: 32px;
+      height: 32px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .exercises__content__main__cards-item-title,
+    .exercise-card__title {
+      font-size: 20px;
+    }
+
+    .exercises__content__main__cards-item-footer,
+    .exercise-card__meta {
+      gap: 8px;
+    }
   }
 
   &__header {
@@ -469,6 +562,12 @@
           svg {
             width: 16px;
             height: 16px;
+            display: block;
+          }
+
+          path {
+            stroke: currentColor;
+            fill: none;
           }
 
           &:hover {
@@ -717,6 +816,52 @@
   .exercises__content {
     padding: var(--spacing-2xl) 0;
 
+    &--favorites {
+      .container {
+        max-width: 768px;
+        margin: 0 auto;
+        padding-left: 32px;
+        padding-right: 32px;
+        box-sizing: border-box;
+      }
+
+      .exercises__content__main__aside__quote {
+        min-height: 220px;
+      }
+
+      .exercises__content__main__aside__info {
+        flex-direction: row-reverse;
+        align-items: stretch;
+        gap: 16px;
+
+        picture {
+          width: 344px;
+          flex: 0 0 344px;
+        }
+      }
+
+      .exercises__content__main__aside__image {
+        width: 344px;
+        height: 141px;
+      }
+
+      .exercises__content__main__aside__norm {
+        width: 344px;
+        min-height: 141px;
+        max-height: 141px;
+        overflow: hidden;
+        flex: 0 0 344px;
+      }
+
+      .exercises__content__main__cards,
+      .exercise-cards {
+        grid-template-columns: repeat(2, minmax(0, 344px));
+        gap: 16px;
+        justify-content: start;
+        align-content: start;
+      }
+    }
+
     &__header {
       &-top {
         flex-direction: row;
@@ -817,6 +962,81 @@
 @media (min-width: 1440px) {
   .exercises__content {
     padding: var(--spacing-3xl) 0;
+
+    &--favorites {
+      .container {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding-left: 32px;
+        padding-right: 32px;
+        box-sizing: border-box;
+      }
+
+      .exercises__content__main {
+        display: grid;
+        grid-template-columns: 494px minmax(0, 1fr);
+        column-gap: 32px;
+        align-items: start;
+      }
+
+      .exercises__content__main__aside {
+        width: 494px;
+        max-width: 494px;
+        gap: 16px;
+      }
+
+      .exercises__content__main__aside__quote {
+        min-height: 230px;
+      }
+
+      .exercises__content__main__aside__info {
+        flex-direction: row-reverse;
+        align-items: stretch;
+        gap: 16px;
+
+        picture {
+          width: 239px;
+          flex: 0 0 239px;
+        }
+      }
+
+      .exercises__content__main__aside__image {
+        width: 239px;
+        height: 141px;
+      }
+
+      .exercises__content__main__aside__norm {
+        width: 239px;
+        min-height: 141px;
+        max-height: 141px;
+        overflow: hidden;
+        flex: 0 0 239px;
+      }
+
+      .exercises__content__main__cards-container {
+        min-width: 0;
+        width: 100%;
+        max-width: none;
+      }
+
+      .exercises__content__main__cards,
+      .exercise-cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 405px));
+        gap: 16px;
+        justify-content: start;
+        align-content: start;
+        width: 100%;
+        max-width: none;
+      }
+
+      .exercises__content__main__cards-item--exercise,
+      .exercise-card--exercise {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+      }
+    }
 
     &__main {
       flex-direction: row;
