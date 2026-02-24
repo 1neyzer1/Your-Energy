@@ -55,13 +55,15 @@
 }
 
 .home__image-small {
+  width: 100%;
+
   picture {
     display: block;
   }
 
   img {
     width: 100%;
-    height: auto;
+    height: 54px;
     border-radius: 20px;
     display: block;
     object-fit: cover;
@@ -101,10 +103,11 @@
 
   img {
     width: 100%;
-    height: 220px;
+    height: 460px;
     border-radius: 30px;
     object-fit: cover;
     display: block;
+    object-position: center top;
   }
 }
 

@@ -326,7 +326,7 @@
           background-color: transparent;
           transition: background-color 0.2s ease;
         }
-    
+
         &--active {
           color: var(--color-dark);
           opacity: 1;
@@ -445,7 +445,7 @@
       width: 100%;
       display: grid;
       grid-template-columns: 1fr;
-      gap: var(--spacing-lg);
+      gap: 16px;
       margin-bottom: var(--spacing-xl);
       list-style: none;
       margin-top: 0;
@@ -454,12 +454,12 @@
       &--exercises {
         grid-template-columns: 1fr;
       }
-   
+
         &-item {
           position: relative;
           border-radius: 12px;
           overflow: hidden;
-          aspect-ratio: 290 / 242;
+          aspect-ratio: 335 / 225;
           cursor: pointer;
           background: none;
           border: none;
@@ -472,13 +472,13 @@
             outline: 2px solid var(--color-dark);
             outline-offset: 4px;
           }
-      
+
         &-image {
           position: relative;
           width: 100%;
           height: 100%;
           overflow: hidden;
-    
+
           img {
             width: 100%;
             height: 100%;
